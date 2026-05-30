@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'KAMIL-SHOP', url: 'https://kamilshop.my.id' }],
   creator: 'KAMIL-SHOP',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kamilshop.my.id'),
+  alternates: {
+    canonical: 'https://kamilshop.my.id',
+  },
   openGraph: {
     type: 'website',
     locale: 'id_ID',
