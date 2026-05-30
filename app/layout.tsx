@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '@/components/shared/AuthProvider';
+import AntiCopy from '@/components/shared/AntiCopy';
 import TurnstileGate from '@/components/shared/TurnstileGate';
 
 export const metadata: Metadata = {
@@ -52,8 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <AuthProvider>
-          <TurnstileGate />
           {children}
+          <AntiCopy />
+          <TurnstileGate />
           <Toaster
             position="top-right"
             toastOptions={{

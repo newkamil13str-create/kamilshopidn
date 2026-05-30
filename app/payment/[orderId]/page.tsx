@@ -144,22 +144,6 @@ export default function PaymentPage() {
             </motion.div>
           )}
 
-          {order.status === 'paid' && (
-            <motion.div
-              key="paid"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="glass rounded-3xl p-8 border border-blue-400/20 mb-6 text-center"
-            >
-              <div className="w-20 h-20 rounded-full bg-blue-400/10 flex items-center justify-center mx-auto mb-5">
-                <RefreshCw size={40} className="text-blue-400 animate-spin" />
-              </div>
-              <h2 className="text-white font-display text-2xl font-bold mb-2">Pembayaran Diterima!</h2>
-              <p className="text-white/50 mb-2">Sedang memproses pengiriman produk...</p>
-              <p className="text-white/30 text-sm">Halaman akan otomatis terupdate</p>
-            </motion.div>
-          )}
-
           {order.status === 'failed' && (
             <motion.div
               key="failed"
@@ -208,20 +192,6 @@ export default function PaymentPage() {
                 </div>
               </div>
 
-              {/* Expired notice */}
-              {isExpired && (
-                <div className="glass rounded-2xl p-5 border border-red-400/20 mb-5 text-center">
-                  <p className="text-red-400 font-semibold mb-1">⏰ Waktu Pembayaran Habis</p>
-                  <p className="text-white/40 text-sm mb-4">Transaksi ini sudah kadaluarsa. Silakan buat order baru.</p>
-                  <button
-                    onClick={() => router.push('/checkout')}
-                    className="w-full py-3 rounded-xl bg-electric-gradient text-white font-semibold"
-                  >
-                    Buat Order Baru
-                  </button>
-                </div>
-              )}
-
               {/* Order info card */}
               <div className="glass rounded-3xl border border-white/5 overflow-hidden mb-5">
                 <div className="p-5 border-b border-white/5">
@@ -262,76 +232,72 @@ export default function PaymentPage() {
                 </div>
               </div>
 
-              {/* Payment Details — hidden kalau expired */}
-              {!isExpired && (
-                <div className="glass rounded-2xl p-5 border border-electric-600/20 mb-5">
-                  {order.paymentMethod === 'qris' && order.paymentNumber ? (
-                    <div className="text-center">
-                      <p className="text-electric-400 text-sm font-medium mb-4">Scan QR Code untuk Membayar</p>
-                      <div className="bg-white rounded-2xl p-4 inline-block mb-4">
-                        <QRCodeSVG
-                          value={order.paymentNumber}
-                          size={200}
-                          level="H"
-                          includeMargin={false}
-                        />
-                      </div>
-                      <p className="text-white/40 text-xs">Buka aplikasi e-wallet Anda dan scan QR di atas</p>
+              {/* Payment Details */}
+              <div className="glass rounded-2xl p-5 border border-electric-600/20 mb-5">
+                {order.paymentMethod === 'qris' && order.paymentNumber ? (
+                  <div className="text-center">
+                    <p className="text-electric-400 text-sm font-medium mb-4">Scan QR Code untuk Membayar</p>
+                    <div className="bg-white rounded-2xl p-4 inline-block mb-4">
+                      <QRCodeSVG
+                        value={order.paymentNumber}
+                        size={200}
+                        level="H"
+                        includeMargin={false}
+                      />
                     </div>
-                  ) : (
-                    <div>
-                      <p className="text-electric-400 text-sm font-medium mb-3">
-                        {order.paymentMethod.toUpperCase()} Virtual Account
-                      </p>
-                      <div className="bg-navy-100 rounded-xl p-4 flex items-center justify-between gap-3 mb-3">
-                        <div>
-                          <p className="text-white/40 text-xs mb-1">Nomor VA</p>
-                          <p className="text-white font-mono text-lg font-bold tracking-wider">
-                            {order.paymentNumber || '—'}
-                          </p>
-                        </div>
-                        <button
-                          onClick={() => handleCopy(order.paymentNumber)}
-                          className="p-2.5 rounded-xl bg-electric-600/20 text-electric-400 hover:bg-electric-600/30 transition-all flex-shrink-0"
-                        >
-                          {copied ? <CheckCircle size={16} /> : <Copy size={16} />}
-                        </button>
-                      </div>
-                      <div className="bg-navy-100 rounded-xl p-4 flex items-center justify-between gap-3">
-                        <div>
-                          <p className="text-white/40 text-xs mb-1">Jumlah Transfer</p>
-                          <p className="text-gold-400 font-mono text-lg font-bold">
-                            {formatCurrency(order.totalPayment || order.amount)}
-                          </p>
-                        </div>
-                        <button
-                          onClick={() => handleCopy(String(order.totalPayment || order.amount))}
-                          className="p-2.5 rounded-xl bg-gold-500/20 text-gold-400 hover:bg-gold-500/30 transition-all flex-shrink-0"
-                        >
-                          <Copy size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Auto check status — hidden kalau expired */}
-              {!isExpired && (
-                <div className="flex items-center justify-between glass rounded-xl p-3.5">
-                  <div className="flex items-center gap-2 text-white/40 text-sm">
-                    <RefreshCw size={14} className={checking ? 'animate-spin text-electric-400' : ''} />
-                    {checking ? 'Mengecek status...' : 'Auto cek setiap 10 detik'}
+                    <p className="text-white/40 text-xs">Buka aplikasi e-wallet Anda dan scan QR di atas</p>
                   </div>
-                  <button
-                    onClick={checkPayment}
-                    disabled={checking}
-                    className="text-electric-400 text-sm hover:text-electric-300 transition-colors disabled:opacity-50"
-                  >
-                    Cek Sekarang
-                  </button>
+                ) : (
+                  <div>
+                    <p className="text-electric-400 text-sm font-medium mb-3">
+                      {order.paymentMethod.toUpperCase()} Virtual Account
+                    </p>
+                    <div className="bg-navy-100 rounded-xl p-4 flex items-center justify-between gap-3 mb-3">
+                      <div>
+                        <p className="text-white/40 text-xs mb-1">Nomor VA</p>
+                        <p className="text-white font-mono text-lg font-bold tracking-wider">
+                          {order.paymentNumber || '—'}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleCopy(order.paymentNumber)}
+                        className="p-2.5 rounded-xl bg-electric-600/20 text-electric-400 hover:bg-electric-600/30 transition-all flex-shrink-0"
+                      >
+                        {copied ? <CheckCircle size={16} /> : <Copy size={16} />}
+                      </button>
+                    </div>
+                    <div className="bg-navy-100 rounded-xl p-4 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-white/40 text-xs mb-1">Jumlah Transfer</p>
+                        <p className="text-gold-400 font-mono text-lg font-bold">
+                          {formatCurrency(order.totalPayment || order.amount)}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleCopy(String(order.totalPayment || order.amount))}
+                        className="p-2.5 rounded-xl bg-gold-500/20 text-gold-400 hover:bg-gold-500/30 transition-all flex-shrink-0"
+                      >
+                        <Copy size={16} />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Auto check status */}
+              <div className="flex items-center justify-between glass rounded-xl p-3.5">
+                <div className="flex items-center gap-2 text-white/40 text-sm">
+                  <RefreshCw size={14} className={checking ? 'animate-spin text-electric-400' : ''} />
+                  {checking ? 'Mengecek status...' : 'Auto cek setiap 10 detik'}
                 </div>
-              )}
+                <button
+                  onClick={checkPayment}
+                  disabled={checking}
+                  className="text-electric-400 text-sm hover:text-electric-300 transition-colors disabled:opacity-50"
+                >
+                  Cek Sekarang
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -339,4 +305,3 @@ export default function PaymentPage() {
     </main>
   );
 }
-
