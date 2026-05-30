@@ -30,6 +30,7 @@ const schema = z.object({
   badge: z.enum(['bestseller', 'new', '']),
   features: z.string(),
   stock: z.string(),
+  contentType: z.enum(['text', 'link']),
   isActive: z.boolean(),
 });
 
@@ -79,7 +80,7 @@ export default function AdminProductsPage() {
       name: p.name, slug: p.slug, description: p.description,
       price: p.price, originalPrice: p.originalPrice, category: p.category,
       imageUrl: p.imageUrl, badge: p.badge as 'bestseller' | 'new' | '',
-      features: p.features.join('\n'), stock: p.stock.join('\n'),
+      features: p.features.join('\n'), stock: p.stock.join('\n'), contentType: (p.contentType as 'text' | 'link') || 'text',
       isActive: p.isActive,
     });
     setShowModal(true);
@@ -112,17 +113,36 @@ export default function AdminProductsPage() {
         badge: data.badge as 'bestseller' | 'new' | '',
         features: data.features.split('\n').filter(Boolean),
         stock: data.stock.split('\n').filter(Boolean),
+        contentType: data.contentType || 'text',
         isActive: data.isActive,
         rating: editProduct?.rating || 5.0,
         totalSold: editProduct?.totalSold || 0,
       };
+
+      let savedId = editProduct?.id;
       if (editProduct) {
         await updateProduct(editProduct.id, productData);
         toast.success('Produk diperbarui!');
       } else {
-        await createProduct(productData);
+        const newDoc = await createProduct(productData);
+        savedId = (newDoc as { id?: string })?.id;
         toast.success('Produk ditambahkan!');
       }
+
+      // Auto fulfill pending orders kalau ada stok baru
+      if (savedId && productData.stock.length > 0) {
+        fetch('/api/fulfill-pending', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId: savedId }),
+        }).then(async (res) => {
+          const data = await res.json();
+          if (data.fulfilled > 0) {
+            toast.success(`✅ ${data.fulfilled} order pending berhasil dikirim otomatis!`);
+          }
+        }).catch(() => {});
+      }
+
       setShowModal(false);
       load();
     } catch {
@@ -416,9 +436,41 @@ export default function AdminProductsPage() {
                 </div>
 
                 <div>
+                  <label className="text-white/60 text-xs mb-1 block">Tipe Konten</label>
+                  <div className="flex gap-2">
+                    {(['text', 'link'] as const).map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setValue('contentType', t)}
+                        className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all border ${
+                          watch('contentType') === t
+                            ? 'bg-electric-gradient text-white border-transparent'
+                            : 'glass border-white/10 text-white/50'
+                        }`}
+                      >
+                        {t === 'text' ? '📝 Teks / Akun' : '🔗 Link / File'}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-white/20 text-xs mt-1">
+                    {watch('contentType') === 'link'
+                      ? 'Isi stok dengan URL download (satu link per baris)'
+                      : 'Isi stok dengan teks/akun (satu item per baris)'}
+                  </p>
+                </div>
+
+                <div>
                   <label className="text-white/60 text-xs mb-1 block">Stok/Konten (satu per baris)</label>
-                  <textarea {...register('stock')} rows={5} className="input-dark w-full px-3 py-2.5 rounded-xl text-sm resize-none font-mono text-xs" placeholder="LICENSE-KEY-001|https://link.com&#10;LICENSE-KEY-002|https://link.com" />
-                  <p className="text-white/20 text-xs mt-1">Setiap baris = 1 item. Item pertama akan dikirim saat order berhasil.</p>
+                  <textarea
+                    {...register('stock')}
+                    rows={5}
+                    className="input-dark w-full px-3 py-2.5 rounded-xl text-sm resize-none font-mono text-xs"
+                    placeholder={watch('contentType') === 'link'
+                      ? 'https://drive.google.com/file/xxx\nhttps://drive.google.com/file/yyy'
+                      : 'email@gmail.com|password123\nemail2@gmail.com|password456'}
+                  />
+                  <p className="text-white/20 text-xs mt-1">Setiap baris = 1 item. Dikirim otomatis ke buyer saat pembayaran berhasil.</p>
                 </div>
 
                 <div className="flex gap-3 pt-2">

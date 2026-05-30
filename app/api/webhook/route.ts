@@ -118,7 +118,8 @@ async function processDelivery(
         order.customerName,
         order.productName,
         updatedOrder.deliveryContent,
-        orderId
+        orderId,
+        product.contentType || 'text'
       );
     } else if (updatedOrder?.deliveryContent === 'STOK_HABIS') {
       // Notif admin stok habis
@@ -134,7 +135,8 @@ async function sendDeliveryEmail(
   name: string,
   productName: string,
   deliveryContent: string,
-  orderId: string
+  orderId: string,
+  contentType: string = 'text'
 ) {
   try {
     const transporter = nodemailer.createTransport({
@@ -147,6 +149,14 @@ async function sendDeliveryEmail(
       },
     });
 
+    const isLink = contentType === 'link' || deliveryContent.startsWith('http');
+
+    const contentHtml = isLink
+      ? `<div style="text-align:center;">
+           <a href="${deliveryContent}" style="display:inline-block;background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;">⬇️ Download / Akses Sekarang</a>
+           <p style="color:rgba(255,255,255,.4);font-size:12px;margin-top:8px;">Atau copy link: <a href="${deliveryContent}" style="color:#60A5FA;">${deliveryContent}</a></p>
+         </div>`
+      : `<pre style="background:rgba(0,0,0,.3);padding:16px;border-radius:8px;color:#F59E0B;overflow:auto;word-break:break-all;white-space:pre-wrap;">${deliveryContent}</pre>`;
     await transporter.sendMail({
       from:    `"KAMIL-SHOP" <${process.env.SMTP_USER}>`,
       to:      email,
@@ -161,13 +171,13 @@ async function sendDeliveryEmail(
             <h2 style="color:#F59E0B;margin-top:0;">✅ Pembayaran Berhasil!</h2>
             <p>Halo <strong>${name}</strong>,</p>
             <p>Terima kasih sudah belanja di KAMIL-SHOP. Berikut detail produk kamu:</p>
-            <p><strong>Order ID:</strong> ${orderId}</p>
+            <p style="color:rgba(255,255,255,.5);font-size:13px;"><strong>Order ID:</strong> ${orderId}</p>
             <div style="background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.3);border-radius:12px;padding:20px;margin:24px 0;">
               <h3 style="margin-top:0;color:#60A5FA;">${productName}</h3>
-              <pre style="background:rgba(0,0,0,.3);padding:16px;border-radius:8px;color:#F59E0B;overflow:auto;word-break:break-all;white-space:pre-wrap;">${deliveryContent}</pre>
+              ${contentHtml}
             </div>
-            <p style="color:rgba(255,255,255,.5);font-size:13px;">
-              Simpan informasi ini baik-baik. Ada pertanyaan? Hubungi kami di
+            <p style="color:rgba(255,255,255,.4);font-size:13px;">
+              Simpan email ini baik-baik. Ada pertanyaan? Hubungi kami di
               <a href="mailto:${process.env.SMTP_USER}" style="color:#60A5FA;">${process.env.SMTP_USER}</a>
             </p>
           </div>

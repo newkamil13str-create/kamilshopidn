@@ -5,17 +5,14 @@ import { AuthProvider } from '@/components/shared/AuthProvider';
 
 export const metadata: Metadata = {
   title: {
-    default: 'KAMIL-SHOP — Solusi Digital Terpercaya #1',
+    default: 'KAMIL-SHOP — Toko Produk Digital Terpercaya',
     template: '%s | KAMIL-SHOP',
   },
-  description: 'Platform jual beli produk digital terbaik dan terpercaya di Indonesia. Bot WhatsApp, Bot Telegram, Akun Premium, Tools & Script.',
-  keywords: ['digital', 'bot whatsapp', 'bot telegram', 'akun premium', 'tools', 'script', 'kamil shop'],
+  description: 'Beli produk digital terpercaya di KAMIL-SHOP. Akun premium, script, tools, bot WA & Telegram. Pengiriman otomatis, harga terjangkau, transaksi aman.',
+  keywords: ['kamil shop', 'toko digital', 'akun premium', 'jual akun', 'script', 'tools digital', 'bot whatsapp', 'bot telegram', 'kamilshop'],
   authors: [{ name: 'KAMIL-SHOP', url: 'https://kamilshop.my.id' }],
   creator: 'KAMIL-SHOP',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kamilshop.my.id'),
-  alternates: {
-    canonical: 'https://kamilshop.my.id',
-  },
   openGraph: {
     type: 'website',
     locale: 'id_ID',
@@ -30,6 +27,9 @@ export const metadata: Metadata = {
     title: 'KAMIL-SHOP — Solusi Digital Terpercaya #1',
     description: 'Platform jual beli produk digital terbaik dan terpercaya di Indonesia.',
     images: ['/og-image.png'],
+  },
+  verification: {
+    google: 'I6EsQEa4y0WJaHqhM2eHzUMaMTb84GM_ukNwiPMxhPE',
   },
   icons: {
     icon: '/favicon.svg',
