@@ -25,6 +25,7 @@ export interface Product {
   totalSold: number;
   stock: string[];
   contentType?: 'text' | 'link';
+  contentType?: 'text' | 'link';
   isActive: boolean;
   createdAt?: Timestamp | Date;
 }
