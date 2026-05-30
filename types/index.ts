@@ -24,6 +24,7 @@ export interface Product {
   rating: number;
   totalSold: number;
   stock: string[];
+  contentType?: 'text' | 'link';
   isActive: boolean;
   createdAt?: Timestamp | Date;
 }
