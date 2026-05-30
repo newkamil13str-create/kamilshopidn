@@ -119,7 +119,7 @@ async function processDelivery(
         order.productName,
         updatedOrder.deliveryContent,
         orderId,
-        product.contentType || 'text'
+        updatedOrder?.contentType || order.contentType || 'text'
       );
     } else if (updatedOrder?.deliveryContent === 'STOK_HABIS') {
       // Notif admin stok habis
