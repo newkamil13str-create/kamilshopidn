@@ -37,7 +37,7 @@
     "date-fns": "^3.6.0",
     "papaparse": "^5.4.1",
     "uuid": "^10.0.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
     "@marsidev/react-turnstile": "^1.5.2"
   },
   "devDependencies": {
