@@ -52,7 +52,8 @@ export default function ProductReviews({ productId }: Props) {
     }
     setLoading(false);
   }
-  useEffect(() => { load(); }, [productId, user]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { load(); }, [productId, user?.id]);
 
   const onSubmit = async (data: FormData) => {
     if (!user) return toast.error('Login dulu untuk review');

@@ -13,6 +13,7 @@ interface Props {
 export default function FlashSaleTimer({ endTime, salePrice, normalPrice, onExpire }: Props) {
   const [timeLeft, setTimeLeft] = useState({ h: 0, m: 0, s: 0, expired: false });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const calc = () => {
       const diff = new Date(endTime).getTime() - Date.now();
