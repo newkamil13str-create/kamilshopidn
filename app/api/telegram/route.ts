@@ -54,7 +54,14 @@ type Step =
   | 'await_promo'
   | 'await_payment'
   | 'await_addstock_id'
-  | 'await_addstock_val';
+  | 'await_addstock_val'
+  | 'auth_await_email_pw'
+  | 'auth_await_password'
+  | 'auth_await_otp_email'
+  | 'auth_await_otp_code'
+  | 'auth_await_reg_name'
+  | 'auth_await_reg_email'
+  | 'auth_await_reg_password';
 
 interface Session {
   step: Step;
@@ -70,6 +77,10 @@ interface Session {
   discount?: number;
   pendingStockProductId?: string;
   lastMsgId?: number;
+  // auth flow
+  authEmail?: string;
+  authName?: string;
+  loggedInUserId?: string;
 }
 
 const sessions = new Map<number, Session>();
@@ -105,10 +116,6 @@ async function handleMessage(msg: Record<string, unknown>) {
 
   const s = get(userId);
 
-  // Auto-delete pesan user setelah diproses (kecuali command /start)
-  if (text !== '/start') {
-    deleteMsg(chatId, msgId).catch(() => {});
-  }
 
   // ── Admin commands ──────────────────────────────────────────────────────────
   if (isAdmin(chatId)) {
@@ -119,16 +126,14 @@ async function handleMessage(msg: Record<string, unknown>) {
 
     // Tambah stok: flow 2 langkah via session
     if (text === '/addstock') {
-      await deleteOld(chatId, s);
-      const r = await sendMessage(chatId, '📦 Kirim <b>Product ID</b> produk yang ingin ditambah stoknya:\n\n<i>Gunakan /products untuk lihat semua ID</i>');
+          const r = await sendMessage(chatId, '📦 Kirim <b>Product ID</b> produk yang ingin ditambah stoknya:\n\n<i>Gunakan /products untuk lihat semua ID</i>');
       set(userId, { step: 'await_addstock_id', lastMsgId: (r as Record<string,unknown>)?.result ? ((r as Record<string,unknown>).result as Record<string,unknown>).message_id as number : undefined });
       return;
     }
 
     // Session-based admin flow
     if (s.step === 'await_addstock_id') {
-      await deleteOld(chatId, s);
-      const r = await sendMessage(chatId, `✅ Product ID: <code>${esc(text)}</code>\n\nSekarang kirim <b>kode stok baru</b>:`);
+          const r = await sendMessage(chatId, `✅ Product ID: <code>${esc(text)}</code>\n\nSekarang kirim <b>kode stok baru</b>:`);
       set(userId, { step: 'await_addstock_val', pendingStockProductId: text.trim(), lastMsgId: (r as Record<string,unknown>)?.result ? ((r as Record<string,unknown>).result as Record<string,unknown>).message_id as number : undefined });
       return;
     }
@@ -145,6 +150,8 @@ async function handleMessage(msg: Record<string, unknown>) {
   if (text === '/produk')   { clear(userId); return productList(chatId, s); }
   if (text === '/pesanan')  { clear(userId); return userOrders(chatId, userId, s); }
   if (text === '/bantuan')  { clear(userId); return helpMenu(chatId, s); }
+  if (text === '/login')    { clear(userId); return authMenu(chatId, s); }
+  if (text === '/daftar')   { clear(userId); return registerStart(chatId, s); }
   if (text === '/batal') {
     clear(userId);
     return sendMessage(chatId, '✅ Dibatalkan. Ketik /menu untuk kembali.');
@@ -153,8 +160,7 @@ async function handleMessage(msg: Record<string, unknown>) {
   // ── Checkout flow ───────────────────────────────────────────────────────────
   if (s.step === 'await_name') {
     if (text.length < 2) return sendMessage(chatId, '❌ Nama terlalu pendek, coba lagi:');
-    await deleteOld(chatId, s);
-    const r = await sendMessage(chatId,
+      const r = await sendMessage(chatId,
       `✅ Nama: <b>${esc(text)}</b>\n\n📧 Masukkan <b>email</b> kamu:\n<i>(produk dikirim ke email ini)</i>`
     );
     set(userId, { ...s, step: 'await_email', name: text, lastMsgId: msgIdFromResult(r) });
@@ -162,8 +168,7 @@ async function handleMessage(msg: Record<string, unknown>) {
   }
   if (s.step === 'await_email') {
     if (!text.includes('@') || !text.includes('.')) return sendMessage(chatId, '❌ Email tidak valid, coba lagi:');
-    await deleteOld(chatId, s);
-    const r = await sendMessage(chatId,
+      const r = await sendMessage(chatId,
       `✅ Email: <b>${esc(text)}</b>\n\n📱 Masukkan nomor <b>WhatsApp</b>:\n<i>Contoh: 08123456789</i>`
     );
     set(userId, { ...s, step: 'await_wa', email: text.toLowerCase().trim(), lastMsgId: msgIdFromResult(r) });
@@ -172,12 +177,45 @@ async function handleMessage(msg: Record<string, unknown>) {
   if (s.step === 'await_wa') {
     const wa = text.replace(/\D/g, '');
     if (wa.length < 10) return sendMessage(chatId, '❌ Nomor WA tidak valid, coba lagi:');
-    await deleteOld(chatId, s);
-    set(userId, { ...s, wa });
+      set(userId, { ...s, wa });
     return promoMenu(chatId, userId, s);
   }
   if (s.step === 'await_promo') {
     return applyPromo(chatId, userId, text.trim().toUpperCase(), s);
+  }
+
+  // ── Auth: Login Email+Password ────────────────────────────────────────────
+  if (s.step === 'auth_await_email_pw') {
+    if (!text.includes('@')) return sendMessage(chatId, '❌ Email tidak valid, coba lagi:');
+    set(userId, { ...s, step: 'auth_await_password', authEmail: text.toLowerCase().trim() });
+    return sendMessage(chatId, `📧 Email: <b>${esc(text)}</b>\n\n🔑 Masukkan <b>password</b> kamu:`);
+  }
+  if (s.step === 'auth_await_password') {
+    return authDoLoginPassword(chatId, userId, s.authEmail!, text, s);
+  }
+
+  // ── Auth: Login OTP ─────────────────────────────────────────────────────────
+  if (s.step === 'auth_await_otp_email') {
+    if (!text.includes('@')) return sendMessage(chatId, '❌ Email tidak valid, coba lagi:');
+    return authSendOtp(chatId, userId, text.toLowerCase().trim(), s);
+  }
+  if (s.step === 'auth_await_otp_code') {
+    return authVerifyOtp(chatId, userId, s.authEmail!, text.trim(), s);
+  }
+
+  // ── Auth: Register ──────────────────────────────────────────────────────────
+  if (s.step === 'auth_await_reg_name') {
+    if (text.length < 2) return sendMessage(chatId, '❌ Nama terlalu pendek, coba lagi:');
+    set(userId, { ...s, step: 'auth_await_reg_email', authName: text });
+    return sendMessage(chatId, `✅ Nama: <b>${esc(text)}</b>\n\n📧 Masukkan <b>email</b> kamu:`);
+  }
+  if (s.step === 'auth_await_reg_email') {
+    if (!text.includes('@')) return sendMessage(chatId, '❌ Email tidak valid, coba lagi:');
+    set(userId, { ...s, step: 'auth_await_reg_password', authEmail: text.toLowerCase().trim() });
+    return sendMessage(chatId, `✅ Email: <b>${esc(text)}</b>\n\n🔑 Buat <b>password</b> (min. 6 karakter):`);
+  }
+  if (s.step === 'auth_await_reg_password') {
+    return authDoRegister(chatId, userId, s.authName!, s.authEmail!, text, s);
   }
 
   // Default
@@ -198,8 +236,6 @@ async function handleCallback(query: Record<string, unknown>) {
   const name   = (from.first_name as string) || 'Kamu';
 
   await answerCallback(cbId);
-  // Delete pesan tombol lama
-  deleteMsg(chatId, msgId).catch(() => {});
 
   const s = get(userId);
 
@@ -234,11 +270,23 @@ async function handleCallback(query: Record<string, unknown>) {
 
   if (data.startsWith('pay_'))     return processPayment(chatId, userId, data.replace('pay_', ''), s);
   if (data.startsWith('cek_'))     return orderStatus(chatId, data.replace('cek_', ''));
+
+  // ── Auth callbacks ──
+  if (data === 'auth_menu')        return authMenu(chatId, s);
+  if (data === 'auth_email_pw') {
+    set(userId, { ...s, step: 'auth_await_email_pw' });
+    return sendMessage(chatId, '📧 Masukkan <b>email</b> kamu:');
+  }
+  if (data === 'auth_otp') {
+    set(userId, { ...s, step: 'auth_await_otp_email' });
+    return sendMessage(chatId, '📧 Masukkan <b>email</b> untuk kirim OTP:');
+  }
+  if (data === 'auth_register')    return registerStart(chatId, s);
+  if (data === 'auth_logout')      return authLogout(chatId, userId, s);
 }
 
 // ─── UI: Main Menu ────────────────────────────────────────────────────────────
 async function mainMenu(chatId: number, name: string, s: Session) {
-  await deleteOld(chatId, s);
   const text =
     `🛍️ <b>KAMIL-SHOP</b> — Selamat datang, ${esc(name)}!\n\n` +
     `Toko digital terpercaya untuk bot, akun premium & tools.\n` +
@@ -252,6 +300,10 @@ async function mainMenu(chatId: number, name: string, s: Session) {
           { text: '🛒 Produk', callback_data: 'products' },
           { text: '📦 Pesanan Saya', callback_data: 'my_orders' },
         ],
+        [
+          { text: '🔐 Login', callback_data: 'auth_menu' },
+          { text: '📝 Daftar', callback_data: 'auth_register' },
+        ],
         [{ text: '❓ Bantuan', callback_data: 'help' }],
         [{ text: '🌐 Buka Website', url: `https://${SITE_DOMAIN}` }],
       ],
@@ -262,7 +314,6 @@ async function mainMenu(chatId: number, name: string, s: Session) {
 
 // ─── UI: Category List ────────────────────────────────────────────────────────
 async function productList(chatId: number, s: Session) {
-  await deleteOld(chatId, s);
   const db   = getAdminDb();
   const snap = await db.collection('categories').orderBy('name').get();
 
@@ -285,7 +336,6 @@ async function productList(chatId: number, s: Session) {
 
 // ─── UI: Products by Category ─────────────────────────────────────────────────
 async function productListByCategory(chatId: number, category: string, s: Session) {
-  await deleteOld(chatId, s);
   const db = getAdminDb();
   let ref = db.collection('products').where('isActive', '==', true);
   if (category !== 'all') {
@@ -330,7 +380,6 @@ async function productListByCategory(chatId: number, category: string, s: Sessio
 
 // ─── UI: Product Detail ───────────────────────────────────────────────────────
 async function productDetail(chatId: number, productId: string, userId: number, s: Session) {
-  await deleteOld(chatId, s);
   const db  = getAdminDb();
   const doc = await db.collection('products').doc(productId).get();
 
@@ -380,7 +429,6 @@ async function productDetail(chatId: number, productId: string, userId: number, 
 
 // ─── CHECKOUT: Start ──────────────────────────────────────────────────────────
 async function startCheckout(chatId: number, userId: number, productId: string, s: Session) {
-  await deleteOld(chatId, s);
   const db  = getAdminDb();
   const doc = await db.collection('products').doc(productId).get();
   if (!doc.exists || !doc.data()!.isActive) {
@@ -457,7 +505,6 @@ async function applyPromo(chatId: number, userId: number, code: string, s: Sessi
 
 // ─── CHECKOUT: Payment Method Menu ───────────────────────────────────────────
 async function paymentMenu(chatId: number, userId: number, s: Session) {
-  await deleteOld(chatId, s);
   let text = `💳 <b>Pilih Metode Pembayaran</b>\n\n`;
   text += `Produk: <b>${esc(s.productName || '')}</b>\n`;
   text += `Total: <b>${rp(s.price || 0)}</b>`;
@@ -633,7 +680,6 @@ async function orderStatus(chatId: number, orderId: string) {
 
 // ─── PUBLIC: User Orders ──────────────────────────────────────────────────────
 async function userOrders(chatId: number, userId: number, s: Session) {
-  await deleteOld(chatId, s);
   const db   = getAdminDb();
   const snap = await db.collection('orders')
     .where('userId', '==', `tg_${userId}`)
@@ -677,7 +723,6 @@ async function userOrders(chatId: number, userId: number, s: Session) {
 
 // ─── PUBLIC: Help ─────────────────────────────────────────────────────────────
 async function helpMenu(chatId: number, s: Session) {
-  await deleteOld(chatId, s);
   const text =
     `❓ <b>Bantuan KAMIL-SHOP</b>\n\n` +
     `<b>Perintah:</b>\n` +
@@ -708,7 +753,6 @@ async function helpMenu(chatId: number, s: Session) {
 
 // ─── ADMIN: Dashboard ─────────────────────────────────────────────────────────
 async function adminMenu(chatId: number, s: Session) {
-  await deleteOld(chatId, s);
   const db = getAdminDb();
   const [pendSnap, prodSnap] = await Promise.all([
     db.collection('orders').where('status', '==', 'pending').get(),
@@ -737,7 +781,6 @@ async function adminMenu(chatId: number, s: Session) {
 
 // ─── ADMIN: Orders ────────────────────────────────────────────────────────────
 async function adminOrders(chatId: number, s: Session) {
-  await deleteOld(chatId, s);
   const db   = getAdminDb();
   const snap = await db.collection('orders').orderBy('createdAt', 'desc').limit(15).get();
   if (snap.empty) {
@@ -813,7 +856,6 @@ async function adminMarkDelivered(chatId: number, orderId: string) {
 
 // ─── ADMIN: Products ──────────────────────────────────────────────────────────
 async function adminProducts(chatId: number, s: Session) {
-  await deleteOld(chatId, s);
   const db   = getAdminDb();
   const snap = await db.collection('products').orderBy('createdAt', 'desc').get();
   if (snap.empty) return sendMessage(chatId, '📦 Belum ada produk.');
@@ -889,7 +931,6 @@ async function adminToggleProduct(chatId: number, productId: string) {
 
 // ─── ADMIN: Add Stock Flow ────────────────────────────────────────────────────
 async function adminAddStockDo(chatId: number, userId: number, productId: string, newStock: string, s: Session) {
-  await deleteOld(chatId, s);
   const db  = getAdminDb();
   const ref = db.collection('products').doc(productId);
   const doc = await ref.get();
@@ -912,7 +953,6 @@ async function adminAddStockDo(chatId: number, userId: number, productId: string
 
 // ─── ADMIN: Stats ─────────────────────────────────────────────────────────────
 async function adminStats(chatId: number, s: Session) {
-  await deleteOld(chatId, s);
   const db = getAdminDb();
   const [ordersSnap, productsSnap, usersSnap] = await Promise.all([
     db.collection('orders').get(),
@@ -953,6 +993,204 @@ async function adminStats(chatId: number, s: Session) {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+// ─── AUTH: Menu Login ─────────────────────────────────────────────────────────
+async function authMenu(chatId: number, s: Session) {
+  const text =
+    `🔐 <b>Login ke KAMIL-SHOP</b>\n\n` +
+    `Pilih metode login:`;
+
+  return sendMessage(chatId, text, {
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: '📧 Email + Password', callback_data: 'auth_email_pw' }],
+        [{ text: '🔑 Email + OTP (tanpa password)', callback_data: 'auth_otp' }],
+        [{ text: '🌐 Login dengan Google', url: `https://${SITE_DOMAIN}/auth/login` }],
+        [{ text: '📝 Belum punya akun? Daftar', callback_data: 'auth_register' }],
+        [{ text: '◀️ Kembali', callback_data: 'menu' }],
+      ],
+    },
+  });
+}
+
+// ─── AUTH: Register Start ─────────────────────────────────────────────────────
+async function registerStart(chatId: number, s: Session) {
+  set(chatId, { ...s, step: 'auth_await_reg_name' });
+  return sendMessage(chatId,
+    `📝 <b>Daftar Akun KAMIL-SHOP</b>\n\n` +
+    `Masukkan <b>nama lengkap</b> kamu:\n\n` +
+    `<i>Ketik /batal untuk membatalkan</i>`
+  );
+}
+
+// ─── AUTH: Login Email+Password ───────────────────────────────────────────────
+async function authDoLoginPassword(chatId: number, userId: number, email: string, password: string, s: Session) {
+  try {
+    const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, returnSecureToken: true }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      const msg = data.error?.message || 'Login gagal';
+      const friendly = msg.includes('INVALID_LOGIN_CREDENTIALS') || msg.includes('WRONG_PASSWORD') || msg.includes('EMAIL_NOT_FOUND')
+        ? 'Email atau password salah.'
+        : msg.includes('TOO_MANY_ATTEMPTS')
+        ? 'Terlalu banyak percobaan. Coba lagi nanti.'
+        : 'Login gagal. Coba lagi.';
+      return sendMessage(chatId, `❌ ${friendly}`, {
+        reply_markup: { inline_keyboard: [[{ text: '◀️ Kembali', callback_data: 'auth_menu' }]] },
+      });
+    }
+
+    // Simpan session login
+    const db = getAdminDb();
+    const snap = await db.collection('users').where('email', '==', email.toLowerCase()).limit(1).get();
+    const displayName = snap.empty ? email.split('@')[0] : (snap.docs[0].data().displayName || email.split('@')[0]);
+
+    set(userId, { step: 'idle', loggedInUserId: snap.empty ? data.localId : snap.docs[0].id, authEmail: email });
+
+    return sendMessage(chatId,
+      `✅ <b>Login berhasil!</b>\n\n` +
+      `👤 ${esc(displayName)}\n` +
+      `📧 ${esc(email)}`,
+      { reply_markup: { inline_keyboard: [
+        [{ text: '🛒 Belanja Sekarang', callback_data: 'products' }],
+        [{ text: '📦 Pesanan Saya', callback_data: 'my_orders' }],
+        [{ text: '🏠 Menu Utama', callback_data: 'menu' }],
+      ]}}
+    );
+  } catch {
+    return sendMessage(chatId, '❌ Gagal menghubungi server. Coba lagi.', {
+      reply_markup: { inline_keyboard: [[{ text: '◀️ Kembali', callback_data: 'auth_menu' }]] },
+    });
+  }
+}
+
+// ─── AUTH: Kirim OTP ──────────────────────────────────────────────────────────
+async function authSendOtp(chatId: number, userId: number, email: string, s: Session) {
+  try {
+    const res = await fetch(`https://${SITE_DOMAIN}/api/send-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      return sendMessage(chatId, `❌ ${data.error || 'Gagal kirim OTP. Coba lagi.'}`, {
+        reply_markup: { inline_keyboard: [[{ text: '◀️ Kembali', callback_data: 'auth_menu' }]] },
+      });
+    }
+    set(userId, { ...s, step: 'auth_await_otp_code', authEmail: email });
+    return sendMessage(chatId,
+      `📨 Kode OTP dikirim ke:\n<b>${esc(email)}</b>\n\n` +
+      `Masukkan <b>6 digit kode OTP</b>:\n\n` +
+      `<i>Berlaku 5 menit. Cek folder Inbox atau Promotions.</i>`
+    );
+  } catch {
+    return sendMessage(chatId, '❌ Gagal kirim OTP. Coba lagi.', {
+      reply_markup: { inline_keyboard: [[{ text: '◀️ Kembali', callback_data: 'auth_menu' }]] },
+    });
+  }
+}
+
+// ─── AUTH: Verifikasi OTP ─────────────────────────────────────────────────────
+async function authVerifyOtp(chatId: number, userId: number, email: string, code: string, s: Session) {
+  try {
+    const res = await fetch(`https://${SITE_DOMAIN}/api/verify-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      return sendMessage(chatId, `❌ ${data.error || 'Kode OTP salah atau kedaluwarsa.'}`, {
+        reply_markup: { inline_keyboard: [[{ text: '🔄 Kirim Ulang OTP', callback_data: 'auth_otp' }, { text: '◀️ Kembali', callback_data: 'auth_menu' }]] },
+      });
+    }
+    const user = data.user;
+    set(userId, { step: 'idle', loggedInUserId: user.id, authEmail: email });
+    return sendMessage(chatId,
+      `✅ <b>Login berhasil!</b>\n\n` +
+      `👤 ${esc(user.displayName)}\n` +
+      `📧 ${esc(email)}`,
+      { reply_markup: { inline_keyboard: [
+        [{ text: '🛒 Belanja Sekarang', callback_data: 'products' }],
+        [{ text: '📦 Pesanan Saya', callback_data: 'my_orders' }],
+        [{ text: '🏠 Menu Utama', callback_data: 'menu' }],
+      ]}}
+    );
+  } catch {
+    return sendMessage(chatId, '❌ Gagal verifikasi. Coba lagi.', {
+      reply_markup: { inline_keyboard: [[{ text: '◀️ Kembali', callback_data: 'auth_menu' }]] },
+    });
+  }
+}
+
+// ─── AUTH: Register ───────────────────────────────────────────────────────────
+async function authDoRegister(chatId: number, userId: number, name: string, email: string, password: string, s: Session) {
+  if (password.length < 6) {
+    return sendMessage(chatId, '❌ Password minimal 6 karakter. Coba lagi:');
+  }
+  try {
+    const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, displayName: name, returnSecureToken: true }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      const msg = data.error?.message || '';
+      const friendly = msg.includes('EMAIL_EXISTS')
+        ? 'Email sudah terdaftar. Silakan login.'
+        : msg.includes('WEAK_PASSWORD')
+        ? 'Password terlalu lemah. Minimal 6 karakter.'
+        : 'Gagal mendaftar. Coba lagi.';
+      return sendMessage(chatId, `❌ ${friendly}`, {
+        reply_markup: { inline_keyboard: [[{ text: '🔐 Login', callback_data: 'auth_menu' }]] },
+      });
+    }
+
+    // Simpan user ke Firestore
+    const db = getAdminDb();
+    const uid = data.localId;
+    await db.collection('users').doc(uid).set({
+      displayName: name,
+      email: email.toLowerCase(),
+      phone: '',
+      role: 'user',
+      totalOrders: 0,
+      createdAt: FieldValue.serverTimestamp(),
+    });
+
+    set(userId, { step: 'idle', loggedInUserId: uid, authEmail: email });
+
+    return sendMessage(chatId,
+      `🎉 <b>Akun berhasil dibuat!</b>\n\n` +
+      `👤 ${esc(name)}\n` +
+      `📧 ${esc(email)}\n\n` +
+      `Selamat berbelanja!`,
+      { reply_markup: { inline_keyboard: [
+        [{ text: '🛒 Mulai Belanja', callback_data: 'products' }],
+        [{ text: '🏠 Menu Utama', callback_data: 'menu' }],
+      ]}}
+    );
+  } catch {
+    return sendMessage(chatId, '❌ Gagal mendaftar. Coba lagi.', {
+      reply_markup: { inline_keyboard: [[{ text: '◀️ Kembali', callback_data: 'auth_register' }]] },
+    });
+  }
+}
+
+// ─── AUTH: Logout ─────────────────────────────────────────────────────────────
+async function authLogout(chatId: number, userId: number, s: Session) {
+  set(userId, { step: 'idle' });
+  return sendMessage(chatId, '👋 Kamu sudah <b>logout</b>.', {
+    reply_markup: { inline_keyboard: [[{ text: '🏠 Menu Utama', callback_data: 'menu' }]] },
+  });
+}
+
 async function deleteOld(chatId: number, s: Session) {
   if (s.lastMsgId) {
     deleteMsg(chatId, s.lastMsgId).catch(() => {});
