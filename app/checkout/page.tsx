@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
@@ -31,16 +31,17 @@ export default function CheckoutPage() {
   const { items, getTotalPrice, clearCart } = useCartStore();
   const { selectedProduct, quantity, clearCheckout } = useCheckoutStore();
   const [loading, setLoading] = useState(false);
-  const searchParams = useSearchParams();
   const [referralCode, setReferralCode] = useState<string | null>(null);
   const [promoResult, setPromoResult] = useState<{
     code: string; discount: number; finalAmount: number; type: string; value: number; promoId?: string;
   } | null>(null);
 
   useEffect(() => {
-    const ref = searchParams.get('ref');
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
     if (ref) setReferralCode(ref);
-  }, [searchParams]);
+  }, []);
 
   const {
     register,
