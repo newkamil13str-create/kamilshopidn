@@ -7,6 +7,9 @@ export interface User {
   phone?: string;
   role: 'admin' | 'user';
   totalOrders: number;
+  referralCode?: string;
+  referredBy?: string;
+  affiliateBalance?: number;
   createdAt?: Timestamp | Date;
 }
 
@@ -20,12 +23,17 @@ export interface Product {
   originalPrice: number;
   category: string;
   imageUrl: string;
-  badge: 'bestseller' | 'new' | '';
+  badge: 'bestseller' | 'new' | '' | 'flash-sale';
   rating: number;
+  ratingCount?: number;
   totalSold: number;
   stock: string[];
   contentType?: 'text' | 'link';
   isActive: boolean;
+  flashSalePrice?: number;
+  flashSaleEnd?: string;
+  bundleIds?: string[];
+  bundlePrice?: number;
   createdAt?: Timestamp | Date;
 }
 
@@ -54,8 +62,45 @@ export interface Order {
   expiredAt: string;
   status: 'pending' | 'paid' | 'delivered' | 'failed' | 'cancelled';
   deliveryContent?: string;
+  promoCode?: string;
+  discount?: number;
+  affiliateCode?: string;
   createdAt?: Timestamp | Date;
   paidAt?: Timestamp | Date;
+}
+
+export interface PromoCode {
+  id: string;
+  code: string;
+  type: 'percent' | 'fixed';
+  value: number;
+  minOrder?: number;
+  maxUses?: number;
+  usedCount: number;
+  isActive: boolean;
+  expiredAt?: string;
+  createdAt?: Timestamp | Date;
+}
+
+export interface AffiliateTransaction {
+  id: string;
+  affiliateUserId: string;
+  referredUserId: string;
+  orderId: string;
+  commission: number;
+  status: 'pending' | 'paid';
+  createdAt?: Timestamp | Date;
+}
+
+export interface Review {
+  id: string;
+  productId: string;
+  userId: string;
+  orderId: string;
+  displayName: string;
+  rating: number;
+  comment: string;
+  createdAt?: Timestamp | Date;
 }
 
 export interface SiteSettings {
@@ -64,6 +109,8 @@ export interface SiteSettings {
   pakasirApiKey: string;
   maintenanceMode: boolean;
   tagline?: string;
+  affiliateCommissionPercent?: number;
+  affiliateMinWithdraw?: number;
 }
 
 export interface CartItem {
@@ -76,6 +123,7 @@ export interface CheckoutForm {
   customerEmail: string;
   customerWhatsApp: string;
   paymentMethod: string;
+  promoCode?: string;
 }
 
 export interface PaymentData {
