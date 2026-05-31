@@ -37,7 +37,6 @@ export default function CheckoutPage() {
   } | null>(null);
 
   useEffect(() => {
-  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('ref');
     if (ref) setReferralCode(ref);
