@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { FieldValue } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
 import nodemailer from 'nodemailer';
+import { notifyAdminNewOrder } from '@/app/api/telegram/route';
 
 /**
  * Webhook Pakasir
@@ -49,6 +50,22 @@ export async function POST(req: NextRequest) {
 
       // Proses delivery (ambil stok)
       await processDelivery(orderId, order, adminDb);
+
+      // Notif admin via Telegram
+      try {
+        const finalOrder = (await orderRef.get()).data();
+        await notifyAdminNewOrder({
+          orderId,
+          productName: order.productName,
+          customerName: order.customerName,
+          customerEmail: order.customerEmail,
+          totalPayment: order.totalPayment || order.amount,
+          paymentMethod: order.paymentMethod,
+          deliveryContent: finalOrder?.deliveryContent,
+        });
+      } catch (tgErr) {
+        console.error("[Telegram Notif Error]", tgErr);
+      }
 
       // Proses komisi affiliate jika ada referral code
       if (order.affiliateCode) {
