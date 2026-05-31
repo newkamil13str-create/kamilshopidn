@@ -655,7 +655,7 @@ async function userOrders(chatId: number, userId: number, s: Session) {
   }
 
   let text = '📦 <b>Pesanan Terakhir</b>\n\n';
-  const keyboard: { text: string; callback_data: string }[][] = [];
+  const keyboard: { text: string; callback_data?: string; url?: string }[][] = [];
   const statusEmoji: Record<string, string> = {
     pending: '⏳', paid: '✅', delivered: '📦', failed: '❌', cancelled: '🚫',
   };
@@ -747,7 +747,7 @@ async function adminOrders(chatId: number, s: Session) {
   }
 
   let text = '📋 <b>15 Pesanan Terbaru</b>\n\n';
-  const keyboard: { text: string; callback_data: string }[][] = [];
+  const keyboard: { text: string; callback_data?: string; url?: string }[][] = [];
   const statusEmoji: Record<string, string> = {
     pending: '⏳', paid: '✅', delivered: '📦', failed: '❌', cancelled: '🚫',
   };
