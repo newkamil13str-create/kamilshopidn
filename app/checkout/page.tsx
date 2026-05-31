@@ -1,18 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ShoppingCart, User, Mail, Phone, CreditCard, Zap, ArrowRight } from 'lucide-react';
+import { ShoppingCart, User, Mail, Phone, CreditCard, Zap, ArrowRight, Tag } from 'lucide-react';
 import { Navbar } from '@/components/shared/Navbar';
 import { Footer } from '@/components/shared/Footer';
 import { useCartStore, useCheckoutStore, useAuthStore } from '@/store';
 import { formatCurrency } from '@/lib/utils';
 import { PAYMENT_METHODS, generateOrderId } from '@/lib/pakasir';
+import PromoInput from '@/components/public/PromoInput';
 import toast from 'react-hot-toast';
 
 const schema = z.object({
@@ -30,6 +31,16 @@ export default function CheckoutPage() {
   const { items, getTotalPrice, clearCart } = useCartStore();
   const { selectedProduct, quantity, clearCheckout } = useCheckoutStore();
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const [referralCode, setReferralCode] = useState<string | null>(null);
+  const [promoResult, setPromoResult] = useState<{
+    code: string; discount: number; finalAmount: number; type: string; value: number; promoId?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) setReferralCode(ref);
+  }, [searchParams]);
 
   const {
     register,
@@ -54,9 +65,14 @@ export default function CheckoutPage() {
     ? [{ product: selectedProduct, quantity }]
     : items;
 
-  const totalAmount = selectedProduct
-    ? selectedProduct.price * quantity
+  const basePrice = selectedProduct
+    ? (selectedProduct.flashSalePrice && selectedProduct.flashSaleEnd && new Date(selectedProduct.flashSaleEnd) > new Date()
+        ? selectedProduct.flashSalePrice
+        : selectedProduct.price) * quantity
     : getTotalPrice();
+
+  const totalAmount = promoResult ? promoResult.finalAmount : basePrice;
+  const discountAmount = promoResult ? promoResult.discount : 0;
 
   if (checkoutItems.length === 0) {
     return (
@@ -101,6 +117,10 @@ export default function CheckoutPage() {
           },
           productName: item.product.name,
           userId: user?.id || null,
+          promoCode: promoResult?.code || null,
+          promoId: promoResult?.promoId || null,
+          discount: discountAmount || 0,
+          referralCode: referralCode || null,
         }),
       });
 
@@ -285,11 +305,31 @@ export default function CheckoutPage() {
                   ))}
                 </div>
 
+                {/* Promo Input */}
+                <div className="mb-4">
+                  <label className="text-white/40 text-xs mb-2 flex items-center gap-1 block">
+                    <Tag size={12} /> Kode Promo
+                  </label>
+                  <PromoInput amount={basePrice} onApply={setPromoResult} />
+                </div>
+
                 <div className="border-t border-white/5 pt-4 space-y-2 mb-5">
                   <div className="flex justify-between text-white/50 text-sm">
                     <span>Subtotal</span>
-                    <span className="font-mono">{formatCurrency(totalAmount)}</span>
+                    <span className="font-mono">{formatCurrency(basePrice)}</span>
                   </div>
+                  {discountAmount > 0 && (
+                    <div className="flex justify-between text-green-400 text-sm">
+                      <span>Diskon ({promoResult?.code})</span>
+                      <span className="font-mono">- {formatCurrency(discountAmount)}</span>
+                    </div>
+                  )}
+                  {referralCode && (
+                    <div className="flex justify-between text-electric-400 text-xs">
+                      <span>Referral</span>
+                      <span className="font-mono">{referralCode}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-white/50 text-sm">
                     <span>Biaya Layanan</span>
                     <span className="text-xs text-white/30">(dihitung saat bayar)</span>

@@ -16,6 +16,8 @@ const siteSchema = z.object({
   tagline: z.string().optional(),
   pakasirSlug: z.string().min(1, 'Pakasir slug wajib diisi'),
   pakasirApiKey: z.string().min(1, 'API key wajib diisi'),
+  affiliateCommissionPercent: z.coerce.number().min(1).max(100).optional(),
+  affiliateMinWithdraw: z.coerce.number().min(0).optional(),
   maintenanceMode: z.boolean(),
 });
 const profileSchema = z.object({

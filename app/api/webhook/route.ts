@@ -50,6 +50,11 @@ export async function POST(req: NextRequest) {
       // Proses delivery (ambil stok)
       await processDelivery(orderId, order, adminDb);
 
+      // Proses komisi affiliate jika ada referral code
+      if (order.affiliateCode) {
+        await processAffiliateCommission(orderId, order, adminDb);
+      }
+
     } else if (isFailed) {
       await orderRef.update({ status: 'failed' });
       console.log('[Webhook] Order failed:', orderId);
@@ -214,4 +219,62 @@ async function sendAdminNotif(productName: string, orderId: string, customerEmai
       `,
     });
   } catch {}
+}
+
+async function processAffiliateCommission(
+  orderId: string,
+  order: FirebaseFirestore.DocumentData,
+  adminDb: FirebaseFirestore.Firestore
+) {
+  try {
+    // Cari user pemilik kode referral
+    const usersSnap = await adminDb
+      .collection('users')
+      .where('referralCode', '==', order.affiliateCode)
+      .limit(1)
+      .get();
+
+    if (usersSnap.empty) {
+      console.log('[Affiliate] Referral code not found:', order.affiliateCode);
+      return;
+    }
+
+    const affiliateUser = usersSnap.docs[0];
+    const affiliateUserId = affiliateUser.id;
+
+    // Jangan kasih komisi ke diri sendiri
+    if (affiliateUserId === order.userId) return;
+
+    // Ambil % komisi dari settings (default 10%)
+    let commissionPercent = 10;
+    try {
+      const settingsDoc = await adminDb.doc('settings/site').get();
+      if (settingsDoc.exists) {
+        const s = settingsDoc.data();
+        if (s?.affiliateCommissionPercent) commissionPercent = Number(s.affiliateCommissionPercent);
+      }
+    } catch {}
+
+    const commission = Math.floor((order.amount * commissionPercent) / 100);
+    if (commission <= 0) return;
+
+    // Tulis transaksi affiliate
+    await adminDb.collection('affiliate_transactions').add({
+      affiliateUserId,
+      referredUserId: order.userId || null,
+      orderId,
+      commission,
+      status: 'pending',
+      createdAt: FieldValue.serverTimestamp(),
+    });
+
+    // Tambah saldo ke affiliator
+    await adminDb.doc(`users/${affiliateUserId}`).update({
+      affiliateBalance: FieldValue.increment(commission),
+    });
+
+    console.log(`[Affiliate] Komisi Rp${commission} → user ${affiliateUserId}`);
+  } catch (err) {
+    console.error('[processAffiliateCommission]', err);
+  }
 }

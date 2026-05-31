@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { method, amount, orderId, productId, customerData, productName, userId } = body;
+    const { method, amount, orderId, productId, customerData, productName, userId, promoCode, promoId, discount, referralCode } = body;
 
     if (!method || !amount || !orderId || !productId || !customerData) {
       return NextResponse.json({ error: 'Data tidak lengkap' }, { status: 400 });
@@ -105,6 +105,10 @@ export async function POST(req: NextRequest) {
       webhookUrl,
       status:          'pending',
       deliveryContent: null,
+      promoCode:       promoCode   || null,
+      promoId:         promoId     || null,
+      discount:        Number(discount) || 0,
+      affiliateCode:   referralCode || null,
       createdAt:       FieldValue.serverTimestamp(),
       paidAt:          null,
     });
@@ -113,6 +117,13 @@ export async function POST(req: NextRequest) {
     if (userId) {
       try {
         await adminDb.doc(`users/${userId}`).update({ totalOrders: FieldValue.increment(1) });
+      } catch {}
+    }
+
+    // Increment promo usedCount
+    if (promoId) {
+      try {
+        await adminDb.doc(`promo_codes/${promoId}`).update({ usedCount: FieldValue.increment(1) });
       } catch {}
     }
 
