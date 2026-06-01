@@ -28,10 +28,11 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ status: deposit.status, deposit });
       }
 
-      // Kalau masih pending, panggil Pakasir untuk cek status terbaru
-      // (opsional — webhook sudah otomatis, tapi ini fallback manual)
+      // Kalau masih pending, webhook sudah otomatis handle — return status saja
       return NextResponse.json({ status: deposit.status, deposit });
     }
+
+    const orderDoc = await adminDb.doc(`orders/${orderId}`).get();
     if (!orderDoc.exists) {
       return NextResponse.json({ error: 'Order tidak ditemukan' }, { status: 404 });
     }
