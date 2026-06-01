@@ -1,0 +1,3136 @@
+[
+  {
+    "name": "8 Ball Pool",
+    "slug": "8-ball-pool",
+    "icon": "🎱",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "8BP516K",
+        "name": "Pile of Coins",
+        "price": 61356
+      },
+      {
+        "code": "8BP2448C",
+        "name": "Wallet of Cash",
+        "price": 114848
+      },
+      {
+        "code": "8BP1224C",
+        "name": "Pile of Cash",
+        "price": 139715
+      },
+      {
+        "code": "8BP4488C",
+        "name": "Stash of Cash",
+        "price": 158716
+      },
+      {
+        "code": "8BP72K",
+        "name": "Mass of Coins",
+        "price": 189453
+      },
+      {
+        "code": "8BPVAULTCA",
+        "name": "Mass of Cash",
+        "price": 311559
+      },
+      {
+        "code": "8BPHEAPCA",
+        "name": "Heap of Cash",
+        "price": 314773
+      }
+    ]
+  },
+  {
+    "name": "Ace Racer",
+    "slug": "ace-racer",
+    "icon": "🏎️",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "ACE60",
+        "name": "65 tokens",
+        "price": 14559
+      },
+      {
+        "code": "ACE250",
+        "name": "270 tokens",
+        "price": 59116
+      },
+      {
+        "code": "ACE680",
+        "name": "740 tokens",
+        "price": 144629
+      },
+      {
+        "code": "ACE1180",
+        "name": "1300 tokens",
+        "price": 271831
+      }
+    ]
+  },
+  {
+    "name": "Arena Of Valor",
+    "slug": "arena-of-valor",
+    "icon": "⚔️",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "AOV40",
+        "name": "40 AOV Vouchers",
+        "price": 9007
+      },
+      {
+        "code": "AOV90",
+        "name": "90 AOV Vouchers",
+        "price": 18009
+      },
+      {
+        "code": "AOV230",
+        "name": "230 AOV Vouchers",
+        "price": 45015
+      },
+      {
+        "code": "AOV470",
+        "name": "470 AOV Vouchers",
+        "price": 90000
+      },
+      {
+        "code": "AOV950",
+        "name": "950 AOV Vouchers",
+        "price": 179970
+      },
+      {
+        "code": "AOV1430",
+        "name": "1430 AOV Vouchers",
+        "price": 269940
+      }
+    ]
+  },
+  {
+    "name": "Be The King",
+    "slug": "be-the-king",
+    "icon": "👑",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "BTK60",
+        "name": "60 Gold",
+        "price": 12975
+      },
+      {
+        "code": "BTKT60",
+        "name": "60 Ult Tokens",
+        "price": 12975
+      },
+      {
+        "code": "BTK300",
+        "name": "300 Gold",
+        "price": 65912
+      },
+      {
+        "code": "BTKT300",
+        "name": "300 Ult Tokens",
+        "price": 65912
+      },
+      {
+        "code": "BTK680",
+        "name": "680 Gold",
+        "price": 132084
+      },
+      {
+        "code": "BTKT680",
+        "name": "680 Ult Tokens",
+        "price": 132084
+      }
+    ]
+  },
+  {
+    "name": "Black Clover Mobile",
+    "slug": "black-clover-mobile",
+    "icon": "🍀",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "BCM43",
+        "name": "40 Premium Black Crystals + 3 Black Crystals",
+        "price": 14041
+      },
+      {
+        "code": "BCMPSH1",
+        "name": "Paket Summon Harian 1",
+        "price": 14041
+      },
+      {
+        "code": "BCM225",
+        "name": "210 Premium Black Crystals + 15 Black Crystals",
+        "price": 70185
+      },
+      {
+        "code": "BCMPSH2",
+        "name": "Paket Summon Harian 2",
+        "price": 70185
+      },
+      {
+        "code": "BCMPSM1",
+        "name": "Paket Summon Mingguan 1",
+        "price": 70185
+      },
+      {
+        "code": "BCM470",
+        "name": "425 Premium Black Crystals + 45 Black Crystals",
+        "price": 140364
+      },
+      {
+        "code": "BCMPSB1",
+        "name": "Paket Summon Bulanan 1",
+        "price": 140364
+      },
+      {
+        "code": "BCM980",
+        "name": "860 Premium Black Crystals + 120 Black Crystals",
+        "price": 280723
+      },
+      {
+        "code": "BCMPSM2",
+        "name": "Paket Summon Mingguan 2",
+        "price": 280723
+      }
+    ]
+  },
+  {
+    "name": "Blood Strike",
+    "slug": "blood-strike",
+    "icon": "🔫",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "BS_100",
+        "name": "100 Gold (100 + 5 Bonus )",
+        "price": 11921
+      },
+      {
+        "code": "BS_300",
+        "name": "300 Gold (300 + 20 Bonus )",
+        "price": 35752
+      },
+      {
+        "code": "BS_SPE",
+        "name": "Strike Elite (Pass)",
+        "price": 55419
+      },
+      {
+        "code": "BS_500",
+        "name": "500 Gold (500 + 40 Bonus)",
+        "price": 59583
+      },
+      {
+        "code": "BS_1000",
+        "name": "1000 Gold (1000 + 100 Bonus )",
+        "price": 119161
+      },
+      {
+        "code": "BS_SPE_PLUS",
+        "name": "Strike Premium (Pass)",
+        "price": 125034
+      },
+      {
+        "code": "BS_2000",
+        "name": "2000 Gold (2000 + 200 Bonus)",
+        "price": 238317
+      }
+    ]
+  },
+  {
+    "name": "Call Of Duty Mobile",
+    "slug": "call-of-duty-mobile",
+    "icon": "💥",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "CODM5",
+        "name": "31 CP Call Of Duty Mobile",
+        "price": 4499
+      },
+      {
+        "code": "CODM10",
+        "name": "63 CP Call Of Duty Mobile",
+        "price": 9126
+      },
+      {
+        "code": "CODM20",
+        "name": "128 CP Call Of Duty Mobile",
+        "price": 18247
+      },
+      {
+        "code": "CODM50",
+        "name": "321 CP Call Of Duty Mobile",
+        "price": 45610
+      },
+      {
+        "code": "CODM100",
+        "name": "645 CP Call Of Duty Mobile",
+        "price": 91215
+      },
+      {
+        "code": "CODM200",
+        "name": "1373 CP Call Of Duty Mobile",
+        "price": 182424
+      },
+      {
+        "code": "CODM300",
+        "name": "2060 CP Call Of Duty Mobile",
+        "price": 273634
+      }
+    ]
+  },
+  {
+    "name": "Captain Tsubasa : Ace",
+    "slug": "captain-tsubasa-ace",
+    "icon": "⚽",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "CTA_6",
+        "name": "6 Golden Ball Pack",
+        "price": 1366
+      },
+      {
+        "code": "CTA_63",
+        "name": "63 (60+3) Golden Ball Pack",
+        "price": 13620
+      },
+      {
+        "code": "CTA_315",
+        "name": "315 (300+15) Golden Ball Pack",
+        "price": 67230
+      },
+      {
+        "code": "CTA_715",
+        "name": "715 (680+35) Golden Ball Pack",
+        "price": 135306
+      },
+      {
+        "code": "CTA_1030",
+        "name": "1030 (980+50) Golden Ball Pack",
+        "price": 211892
+      },
+      {
+        "code": "CTA_1345",
+        "name": "1345 (1280+65) Golden Ball Pack",
+        "price": 279967
+      }
+    ]
+  },
+  {
+    "name": "Cloud Song",
+    "slug": "cloud-song",
+    "icon": "🎵",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "CST16",
+        "name": "16.000 Ticket",
+        "price": 10400
+      },
+      {
+        "code": "CST35",
+        "name": "35.000 Ticket",
+        "price": 16635
+      },
+      {
+        "code": "CST49",
+        "name": "49.000 Ticket",
+        "price": 27446
+      },
+      {
+        "code": "CST99",
+        "name": "99.000 Ticket",
+        "price": 54054
+      },
+      {
+        "code": "CST199",
+        "name": "199.000 Ticket",
+        "price": 103945
+      },
+      {
+        "code": "CST359",
+        "name": "359.000 Ticket",
+        "price": 207884
+      },
+      {
+        "code": "CST479",
+        "name": "479.000 Ticket",
+        "price": 270248
+      }
+    ]
+  },
+  {
+    "name": "Conquer Online",
+    "slug": "conquer-online",
+    "icon": "🏯",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "CO60",
+        "name": "60 Conquer Points",
+        "price": 18513
+      },
+      {
+        "code": "CO125",
+        "name": "125 Conquer Points",
+        "price": 37022
+      },
+      {
+        "code": "CO320",
+        "name": "320 Conquer Points",
+        "price": 92021
+      },
+      {
+        "code": "CO530",
+        "name": "530 Conquer Points",
+        "price": 147283
+      },
+      {
+        "code": "CO1075",
+        "name": "1075 Conquer Points",
+        "price": 294297
+      }
+    ]
+  },
+  {
+    "name": "Dragonheir : Silent Gods",
+    "slug": "dragonheir-silent-gods",
+    "icon": "🐉",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "DHR70",
+        "name": "Dragonite x70",
+        "price": 12988
+      },
+      {
+        "code": "DHR350",
+        "name": "Dragon Crystal x350",
+        "price": 74915
+      }
+    ]
+  },
+  {
+    "name": "Echocalypse",
+    "slug": "echocalypse",
+    "icon": "🌸",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "ECHO60",
+        "name": "60 Gold Flower",
+        "price": 13140
+      },
+      {
+        "code": "ECHO300",
+        "name": "300 Gold Flower",
+        "price": 66209
+      },
+      {
+        "code": "ECHO600",
+        "name": "600 Gold Flower",
+        "price": 119277
+      },
+      {
+        "code": "ECHO980",
+        "name": "980 Gold Flower",
+        "price": 198879
+      }
+    ]
+  },
+  {
+    "name": "Ensemble Stars Music",
+    "slug": "ensemble-stars-music",
+    "icon": "⭐",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "ESM99",
+        "name": "99 EP Points",
+        "price": 15900
+      },
+      {
+        "code": "ESM499",
+        "name": "499 EP Points",
+        "price": 79472
+      },
+      {
+        "code": "ESM1499",
+        "name": "1499 EP Points",
+        "price": 238407
+      }
+    ]
+  },
+  {
+    "name": "Eudemons Online",
+    "slug": "eudemons-online",
+    "icon": "👼",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "EOP80",
+        "name": "80 Eudemons Points",
+        "price": 18513
+      },
+      {
+        "code": "EOP165",
+        "name": "165 Eudemons Points",
+        "price": 37022
+      },
+      {
+        "code": "EOP420",
+        "name": "420 Eudemons Points",
+        "price": 92021
+      },
+      {
+        "code": "EOP680",
+        "name": "680 Eudemons Points",
+        "price": 147283
+      },
+      {
+        "code": "EOP1380",
+        "name": "1380 Eudemons Points",
+        "price": 294297
+      }
+    ]
+  },
+  {
+    "name": "Fc Mobile",
+    "slug": "fc-mobile",
+    "icon": "⚽",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "FCMBL39S",
+        "name": "39 Silver",
+        "price": 6136
+      },
+      {
+        "code": "FCMBL40",
+        "name": "40 (FC POINTS)",
+        "price": 6136
+      },
+      {
+        "code": "FCMBL100",
+        "name": "100 (FC POINTS)",
+        "price": 15095
+      },
+      {
+        "code": "FCMBL99S",
+        "name": "99 Silver",
+        "price": 15095
+      },
+      {
+        "code": "FCMBL499S",
+        "name": "499 Silver",
+        "price": 74508
+      },
+      {
+        "code": "FCMBL520",
+        "name": "520 (FC POINTS)",
+        "price": 74508
+      },
+      {
+        "code": "FCMBL1070",
+        "name": "1070 (FC POINTS)",
+        "price": 149952
+      },
+      {
+        "code": "FCMBL999S",
+        "name": "999 Silver",
+        "price": 149952
+      },
+      {
+        "code": "FCMBL1999S",
+        "name": "1999 Silver",
+        "price": 310273
+      },
+      {
+        "code": "FCMBL2200",
+        "name": "2200 (FC POINTS)",
+        "price": 310273
+      }
+    ]
+  },
+  {
+    "name": "Football Master 2",
+    "slug": "football-master-2",
+    "icon": "🏆",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "FM18",
+        "name": "18 FMP",
+        "price": 3455
+      },
+      {
+        "code": "FM191",
+        "name": "191 FMP",
+        "price": 34503
+      },
+      {
+        "code": "FM382",
+        "name": "382 FMP",
+        "price": 69000
+      },
+      {
+        "code": "FM972",
+        "name": "972 FMP",
+        "price": 172494
+      },
+      {
+        "code": "FM1944",
+        "name": "1944 FMP",
+        "price": 344981
+      }
+    ]
+  },
+  {
+    "name": "Free Fire",
+    "slug": "free-fire",
+    "icon": "🔥",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "FFP5",
+        "name": "5 Diamond",
+        "price": 935
+      },
+      {
+        "code": "FFM5",
+        "name": "5 Diamond",
+        "price": 960
+      },
+      {
+        "code": "FFM10",
+        "name": "10 Diamond",
+        "price": 1865
+      },
+      {
+        "code": "FFP20",
+        "name": "20 Diamond",
+        "price": 3271
+      },
+      {
+        "code": "FFM20",
+        "name": "20 Diamond",
+        "price": 3675
+      },
+      {
+        "code": "FFM25",
+        "name": "25 Diamond",
+        "price": 4580
+      },
+      {
+        "code": "FFP50",
+        "name": "50 Diamond",
+        "price": 6513
+      },
+      {
+        "code": "FFM50",
+        "name": "50 Diamond",
+        "price": 7290
+      },
+      {
+        "code": "FFM70",
+        "name": "70 Diamond",
+        "price": 9169
+      },
+      {
+        "code": "FFP70",
+        "name": "70 Diamond",
+        "price": 9255
+      },
+      {
+        "code": "FFM75",
+        "name": "75 Diamond",
+        "price": 10094
+      },
+      {
+        "code": "FFM80",
+        "name": "80 Diamond",
+        "price": 10930
+      },
+      {
+        "code": "FFM90",
+        "name": "90 Diamond",
+        "price": 12718
+      },
+      {
+        "code": "FFM100",
+        "name": "100 Diamond",
+        "price": 14528
+      },
+      {
+        "code": "FFM120",
+        "name": "120 Diamond",
+        "price": 16333
+      },
+      {
+        "code": "FFM140",
+        "name": "140 Diamond",
+        "price": 18459
+      },
+      {
+        "code": "FFP140",
+        "name": "140 Diamond",
+        "price": 18505
+      },
+      {
+        "code": "FFM150",
+        "name": "150 Diamond",
+        "price": 20132
+      },
+      {
+        "code": "FFM160",
+        "name": "160 Diamond",
+        "price": 21805
+      },
+      {
+        "code": "FFM190",
+        "name": "190 Diamond",
+        "price": 25376
+      },
+      {
+        "code": "FFM200",
+        "name": "200 Diamond",
+        "price": 27186
+      },
+      {
+        "code": "FFM210",
+        "name": "210 Diamond",
+        "price": 27661
+      },
+      {
+        "code": "FFMM",
+        "name": "Member Mingguan",
+        "price": 28155
+      },
+      {
+        "code": "FFPM",
+        "name": "Member Mingguan",
+        "price": 28205
+      },
+      {
+        "code": "FFM280",
+        "name": "280 Diamond",
+        "price": 36888
+      },
+      {
+        "code": "FFM355",
+        "name": "355 Diamond",
+        "price": 46090
+      },
+      {
+        "code": "FFP355",
+        "name": "355 Diamond",
+        "price": 46355
+      },
+      {
+        "code": "FFM375",
+        "name": "375 Diamond",
+        "price": 48915
+      },
+      {
+        "code": "FFM405",
+        "name": "405 Diamond",
+        "price": 52530
+      },
+      {
+        "code": "FFM400",
+        "name": "400 Diamond",
+        "price": 53440
+      },
+      {
+        "code": "FFM425",
+        "name": "425 Diamond",
+        "price": 55292
+      },
+      {
+        "code": "FFM475",
+        "name": "475 Diamond",
+        "price": 61985
+      },
+      {
+        "code": "FFM500",
+        "name": "500 Diamond",
+        "price": 64786
+      },
+      {
+        "code": "FFM510",
+        "name": "510 Diamond",
+        "price": 67400
+      },
+      {
+        "code": "FFPB",
+        "name": "Member Bulanan",
+        "price": 82127
+      },
+      {
+        "code": "FFMB",
+        "name": "Member Bulanan",
+        "price": 84313
+      },
+      {
+        "code": "FFP720",
+        "name": "720 Diamond",
+        "price": 92125
+      },
+      {
+        "code": "FFM720",
+        "name": "720 Diamond",
+        "price": 92670
+      },
+      {
+        "code": "FFM770",
+        "name": "770 Diamond",
+        "price": 98530
+      },
+      {
+        "code": "FFM790",
+        "name": "790 Diamond",
+        "price": 100353
+      },
+      {
+        "code": "FFM860",
+        "name": "860 Diamond",
+        "price": 109466
+      },
+      {
+        "code": "FFM930",
+        "name": "930 Diamond",
+        "price": 118580
+      },
+      {
+        "code": "FFM1000",
+        "name": "1000 Diamond",
+        "price": 127693
+      },
+      {
+        "code": "FFM1075",
+        "name": "1075 Diamond",
+        "price": 136806
+      },
+      {
+        "code": "FFM1440",
+        "name": "1440 Diamond",
+        "price": 182473
+      },
+      {
+        "code": "FFM2000",
+        "name": "2000 Diamond",
+        "price": 254469
+      },
+      {
+        "code": "FFP2000",
+        "name": "2000 Diamond",
+        "price": 259162
+      },
+      {
+        "code": "FFM2355",
+        "name": "2355 Diamond",
+        "price": 298217
+      },
+      {
+        "code": "FFM2720",
+        "name": "2720 Diamond",
+        "price": 345608
+      },
+      {
+        "code": "FFM4000",
+        "name": "4000 Diamond",
+        "price": 502352
+      },
+      {
+        "code": "FFP7290",
+        "name": "7290 Diamond",
+        "price": 888105
+      },
+      {
+        "code": "FFM7290",
+        "name": "7290 Diamond",
+        "price": 911840
+      }
+    ]
+  },
+  {
+    "name": "Goddess of Victory : Nikke",
+    "slug": "goddess-of-victory-nikke",
+    "icon": "🤖",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "NIK60",
+        "name": "60 Gems + 1",
+        "price": 14507
+      },
+      {
+        "code": "NIK120",
+        "name": "120 Gems + 3",
+        "price": 31729
+      },
+      {
+        "code": "NIK320",
+        "name": "320 Gems + 10",
+        "price": 71610
+      },
+      {
+        "code": "NIK720",
+        "name": "720 Gems + 120",
+        "price": 144122
+      },
+      {
+        "code": "NIK1500",
+        "name": "1500 Gems + 260",
+        "price": 298209
+      }
+    ]
+  },
+  {
+    "name": "Hatsune Miku Colorful Stage",
+    "slug": "hatsune-miku-colorful-stage",
+    "icon": "🎤",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "HTSN50",
+        "name": "Crystals x 50",
+        "price": 5620
+      },
+      {
+        "code": "HTSN110",
+        "name": "Crystals A x 110",
+        "price": 12311
+      },
+      {
+        "code": "HTSN350",
+        "name": "Crystals B x 350",
+        "price": 37690
+      },
+      {
+        "code": "HTSN950",
+        "name": "Crystals C x 950",
+        "price": 99216
+      },
+      {
+        "code": "HTSN1800",
+        "name": "Crystals D x 1800",
+        "price": 191506
+      },
+      {
+        "code": "HTSN3060",
+        "name": "Crystals E x 3060",
+        "price": 306868
+      }
+    ]
+  },
+  {
+    "name": "Heroes Evolved",
+    "slug": "heroes-evolved",
+    "icon": "🛡️",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "HE100",
+        "name": "100 Tokens",
+        "price": 14789
+      },
+      {
+        "code": "HE240",
+        "name": "240 Tokens",
+        "price": 35690
+      },
+      {
+        "code": "HE500",
+        "name": "500 Tokens",
+        "price": 74512
+      },
+      {
+        "code": "HE1200",
+        "name": "1200 Tokens",
+        "price": 149162
+      },
+      {
+        "code": "HE2500",
+        "name": "2500 Tokens",
+        "price": 298465
+      }
+    ]
+  },
+  {
+    "name": "Honkai impact 3",
+    "slug": "honkai-impact-3",
+    "icon": "⚡",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "HIMC",
+        "name": "Monthly-Card",
+        "price": 78762
+      }
+    ]
+  },
+  {
+    "name": "Honor of Kings",
+    "slug": "honor-of-kings",
+    "icon": "👸",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "HOK1",
+        "name": "Honor of Kings 16 Tokens",
+        "price": 2920
+      },
+      {
+        "code": "HOK2",
+        "name": "Honor of Kings 80 Tokens",
+        "price": 15013
+      },
+      {
+        "code": "HOK3",
+        "name": "Honor of Kings 240 Tokens",
+        "price": 45048
+      },
+      {
+        "code": "HOK4",
+        "name": "Honor of Kings 400 Tokens",
+        "price": 74636
+      },
+      {
+        "code": "HOK5",
+        "name": "Honor of Kings 560 Tokens",
+        "price": 100678
+      },
+      {
+        "code": "HOK6",
+        "name": "Honor of Kings 800 Tokens",
+        "price": 146763
+      },
+      {
+        "code": "HOK7",
+        "name": "Honor of Kings 1.200 Tokens",
+        "price": 223022
+      },
+      {
+        "code": "HOK8",
+        "name": "Honor of Kings 2.400 Tokens",
+        "price": 451985
+      },
+      {
+        "code": "HOK9",
+        "name": "Honor of Kings 4.000 Tokens",
+        "price": 753493
+      },
+      {
+        "code": "HOK10",
+        "name": "Honor of Kings 8.000 Tokens",
+        "price": 1510298
+      }
+    ]
+  },
+  {
+    "name": "Hyper Front",
+    "slug": "hyper-front",
+    "icon": "🎯",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "HFSQ60",
+        "name": "60 Star Quartz",
+        "price": 11873
+      },
+      {
+        "code": "HFSQ300",
+        "name": "300 Star Quartz",
+        "price": 59749
+      },
+      {
+        "code": "HFSQ1280",
+        "name": "1280 Star Quartz",
+        "price": 239295
+      },
+      {
+        "code": "HFSQ1980",
+        "name": "1980 Star Quartz",
+        "price": 358983
+      }
+    ]
+  },
+  {
+    "name": "Idle Legends",
+    "slug": "idle-legends",
+    "icon": "🗡️",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "ILS90",
+        "name": "90 Diamonds",
+        "price": 14043
+      },
+      {
+        "code": "ILS450",
+        "name": "450 Diamonds",
+        "price": 70193
+      },
+      {
+        "code": "ILS900",
+        "name": "900 Diamonds",
+        "price": 140380
+      },
+      {
+        "code": "ILS1350",
+        "name": "1350 Diamonds",
+        "price": 210567
+      },
+      {
+        "code": "ILS1840",
+        "name": "1840 Diamonds",
+        "price": 280754
+      }
+    ]
+  },
+  {
+    "name": "Jade Legends",
+    "slug": "jade-legends",
+    "icon": "💎",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "JADE90",
+        "name": "90 Jade",
+        "price": 16049
+      },
+      {
+        "code": "JADE450",
+        "name": "Jade Legends 450 Jade",
+        "price": 80225
+      },
+      {
+        "code": "JADEKBULANANJ",
+        "name": "Kartu Bulanan Joy",
+        "price": 80225
+      },
+      {
+        "code": "JADE900",
+        "name": "900 Jade",
+        "price": 160444
+      },
+      {
+        "code": "JADEKBULANANS",
+        "name": "Kartu Bulanan Supreme",
+        "price": 160444
+      },
+      {
+        "code": "JADE1350",
+        "name": "1350 Jade",
+        "price": 240664
+      },
+      {
+        "code": "JADE1800",
+        "name": "1800 Jade",
+        "price": 320882
+      }
+    ]
+  },
+  {
+    "name": "Life After",
+    "slug": "life-after",
+    "icon": "🧟",
+    "needsZoneId": false,
+    "needsNick": true,
+    "products": [
+      {
+        "code": "LAC65",
+        "name": "65 Credits",
+        "price": 15319
+      },
+      {
+        "code": "LAC330",
+        "name": "330 Credits",
+        "price": 72146
+      },
+      {
+        "code": "LAC558",
+        "name": "558 Credits",
+        "price": 110342
+      },
+      {
+        "code": "LAC1108",
+        "name": "1108 Credits",
+        "price": 226021
+      }
+    ]
+  },
+  {
+    "name": "Life Makeover",
+    "slug": "life-makeover",
+    "icon": "💄",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "LMO60",
+        "name": "60 Kupon",
+        "price": 14564
+      },
+      {
+        "code": "LMOPI",
+        "name": "Pack Imut",
+        "price": 14564
+      },
+      {
+        "code": "LMO300",
+        "name": "300 Kupon",
+        "price": 72794
+      },
+      {
+        "code": "LMOMP",
+        "name": "Member Premium",
+        "price": 72794
+      },
+      {
+        "code": "LMOKGN",
+        "name": "Kartu Ganti Nama",
+        "price": 156170
+      },
+      {
+        "code": "LMO980",
+        "name": "980 Kupon",
+        "price": 224988
+      }
+    ]
+  },
+  {
+    "name": "Light Of Thel",
+    "slug": "light-of-thel",
+    "icon": "✨",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "LOT90",
+        "name": "90 Crystals",
+        "price": 13097
+      },
+      {
+        "code": "LOT450",
+        "name": "450 Crystals",
+        "price": 65539
+      },
+      {
+        "code": "LOT900",
+        "name": "900 Crystals",
+        "price": 131599
+      },
+      {
+        "code": "LOT1800",
+        "name": "1800 Crystals",
+        "price": 263193
+      }
+    ]
+  },
+  {
+    "name": "Lokapala",
+    "slug": "lokapala",
+    "icon": "🌏",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "LKP518",
+        "name": "518 Citrine",
+        "price": 180133
+      }
+    ]
+  },
+  {
+    "name": "MangaToon",
+    "slug": "mangatoon",
+    "icon": "📚",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "MT100",
+        "name": "100 Coins",
+        "price": 14165
+      },
+      {
+        "code": "MT600",
+        "name": "600 Coins",
+        "price": 83055
+      },
+      {
+        "code": "MT1000",
+        "name": "1000 Coins",
+        "price": 138155
+      }
+    ]
+  },
+  {
+    "name": "Marvel Super War",
+    "slug": "marvel-super-war",
+    "icon": "🦸",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "MSAW55",
+        "name": "55 Star Credits",
+        "price": 11344
+      },
+      {
+        "code": "MSW275",
+        "name": "275 Star Credits",
+        "price": 59300
+      },
+      {
+        "code": "MSW565",
+        "name": "565 Star Credits",
+        "price": 114515
+      },
+      {
+        "code": "MSW1155",
+        "name": "1155 Star Credits",
+        "price": 237186
+      },
+      {
+        "code": "MSW1765",
+        "name": "1765 Star Credits",
+        "price": 371904
+      }
+    ]
+  },
+  {
+    "name": "Mobile Legends",
+    "slug": "mobile-legends",
+    "icon": "🗡️",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "CML",
+        "name": "Cek Username Akun Mobile Legends",
+        "price": 10
+      },
+      {
+        "code": "ML5",
+        "name": "5 Diamonds",
+        "price": 1491
+      },
+      {
+        "code": "ML10",
+        "name": "10 Diamonds",
+        "price": 2968
+      },
+      {
+        "code": "ML12",
+        "name": "12 Diamonds",
+        "price": 3406
+      },
+      {
+        "code": "ML14",
+        "name": "14 Diamond",
+        "price": 4326
+      },
+      {
+        "code": "ML15",
+        "name": "15 Diamonds",
+        "price": 4363
+      },
+      {
+        "code": "ML17",
+        "name": "17 Diamonds",
+        "price": 4556
+      },
+      {
+        "code": "ML18",
+        "name": "18 Diamonds",
+        "price": 4943
+      },
+      {
+        "code": "ML19",
+        "name": "19 Diamonds",
+        "price": 5321
+      },
+      {
+        "code": "MLBB20",
+        "name": "20 Diamonds (18 + 2 Bonus)",
+        "price": 5700
+      },
+      {
+        "code": "MLBB23",
+        "name": "23 Diamonds (21 + 2 Bonus)",
+        "price": 6244
+      },
+      {
+        "code": "ML28",
+        "name": "28 Diamonds",
+        "price": 8065
+      },
+      {
+        "code": "MLBB30",
+        "name": "30 Diamonds (28 + 2 Bonus)",
+        "price": 8142
+      },
+      {
+        "code": "MLBB33",
+        "name": "33 Diamonds (30 + 3 Bonus)",
+        "price": 9009
+      },
+      {
+        "code": "ML36",
+        "name": "36 Diamonds",
+        "price": 9787
+      },
+      {
+        "code": "MLBB40",
+        "name": "40 Diamonds (36 + 4 Bonus)",
+        "price": 10916
+      },
+      {
+        "code": "ML42",
+        "name": "42 Diamond",
+        "price": 11648
+      },
+      {
+        "code": "ML44",
+        "name": "44 Diamonds",
+        "price": 11652
+      },
+      {
+        "code": "MLBB45",
+        "name": "45 Diamonds (42 + 3 Bonus)",
+        "price": 12340
+      },
+      {
+        "code": "ML46",
+        "name": "46 Diamonds",
+        "price": 12742
+      },
+      {
+        "code": "ML50",
+        "name": "50 Diamonds",
+        "price": 13549
+      },
+      {
+        "code": "MLBB54",
+        "name": "54 Diamonds (50 + 4 Bonus)",
+        "price": 14238
+      },
+      {
+        "code": "ML56",
+        "name": "56 Diamonds",
+        "price": 14945
+      },
+      {
+        "code": "ML59",
+        "name": "59 Diamonds",
+        "price": 15503
+      },
+      {
+        "code": "MLBB60",
+        "name": "60 Diamonds (56 + 4 Bonus)",
+        "price": 16136
+      },
+      {
+        "code": "MLBB64",
+        "name": "64 Diamonds (60 + 4 Bonus)",
+        "price": 16609
+      },
+      {
+        "code": "MLBB65",
+        "name": "65 Diamonds (61 + 4 Bonus)",
+        "price": 17187
+      },
+      {
+        "code": "MLBB68",
+        "name": "68 Diamonds (63 + 5 Bonus)",
+        "price": 18033
+      },
+      {
+        "code": "ML66",
+        "name": "66 Diamonds",
+        "price": 18055
+      },
+      {
+        "code": "MLBB71",
+        "name": "71 Diamonds (64 + 7 Bonus)",
+        "price": 18507
+      },
+      {
+        "code": "ML70",
+        "name": "70 Diamond",
+        "price": 18657
+      },
+      {
+        "code": "ML74",
+        "name": "74 Diamonds",
+        "price": 19660
+      },
+      {
+        "code": "MLBB75",
+        "name": "75 Diamonds (69 + 6 Bonus)",
+        "price": 20072
+      },
+      {
+        "code": "MLBB78",
+        "name": "78 Diamonds (71 + 7 Bonus)",
+        "price": 20495
+      },
+      {
+        "code": "MLBB81",
+        "name": "81 Diamonds (75 + 7 Bonus)",
+        "price": 21827
+      },
+      {
+        "code": "MLBB84",
+        "name": "84 Diamonds (77 + 7 Bonus)",
+        "price": 21827
+      },
+      {
+        "code": "ML85",
+        "name": "85 Diamonds",
+        "price": 22177
+      },
+      {
+        "code": "MLA86",
+        "name": "86 Diamonds (78 + 8 Bonus)",
+        "price": 22704
+      },
+      {
+        "code": "MLBB88",
+        "name": "88 Diamonds (80 + 8 Bonus)",
+        "price": 22776
+      },
+      {
+        "code": "MLBB92",
+        "name": "92 Diamonds (84 + 8 Bonus)",
+        "price": 23886
+      },
+      {
+        "code": "ML100",
+        "name": "100 Diamonds",
+        "price": 26526
+      },
+      {
+        "code": "MLWDP",
+        "name": "Weekly Diamond Pass",
+        "price": 28213
+      },
+      {
+        "code": "ML110",
+        "name": "110 Diamond",
+        "price": 29502
+      },
+      {
+        "code": "ML112",
+        "name": "112 Diamond",
+        "price": 29566
+      },
+      {
+        "code": "ML113",
+        "name": "113 Diamonds",
+        "price": 30067
+      },
+      {
+        "code": "ML114",
+        "name": "114 Diamonds",
+        "price": 30225
+      },
+      {
+        "code": "ML140",
+        "name": "140 Diamond",
+        "price": 36684
+      },
+      {
+        "code": "ML148",
+        "name": "148 Diamonds",
+        "price": 39127
+      },
+      {
+        "code": "ML154",
+        "name": "154 Diamonds",
+        "price": 40289
+      },
+      {
+        "code": "DML172",
+        "name": "172 (156+16) Diamond Mobile Legend",
+        "price": 43900
+      },
+      {
+        "code": "ML170",
+        "name": "170 Diamonds",
+        "price": 44424
+      },
+      {
+        "code": "ML184",
+        "name": "184 Diamonds",
+        "price": 47705
+      },
+      {
+        "code": "ML185",
+        "name": "185 Diamond",
+        "price": 48119
+      },
+      {
+        "code": "ML210",
+        "name": "210 Diamonds",
+        "price": 54447
+      },
+      {
+        "code": "MLWDPX2",
+        "name": "2x Weekly Diamond Pass",
+        "price": 55811
+      },
+      {
+        "code": "ML222",
+        "name": "222 Diamonds",
+        "price": 58444
+      },
+      {
+        "code": "ML240",
+        "name": "240 Diamonds",
+        "price": 62308
+      },
+      {
+        "code": "DML257",
+        "name": "257 (234+23) Diamond Mobile Legend",
+        "price": 64428
+      },
+      {
+        "code": "ML284",
+        "name": "284 Diamond",
+        "price": 74029
+      },
+      {
+        "code": "ML296",
+        "name": "296 Diamonds",
+        "price": 76673
+      },
+      {
+        "code": "ML305",
+        "name": "305 Diamond",
+        "price": 80821
+      },
+      {
+        "code": "MLWDPX3",
+        "name": "3x Weekly Diamond Pass",
+        "price": 83514
+      },
+      {
+        "code": "DML344",
+        "name": "344 (312+32) Diamond Mobile Legend",
+        "price": 87503
+      },
+      {
+        "code": "ML355",
+        "name": "355 Diamond",
+        "price": 91337
+      },
+      {
+        "code": "ML366",
+        "name": "366 Diamonds",
+        "price": 95223
+      },
+      {
+        "code": "ML370",
+        "name": "370 Diamonds",
+        "price": 97320
+      },
+      {
+        "code": "ML384",
+        "name": "384 Diamonds",
+        "price": 101203
+      },
+      {
+        "code": "ML408",
+        "name": "408 Diamonds",
+        "price": 106005
+      },
+      {
+        "code": "DML429",
+        "name": "429 (390+39) Diamond Mobile Legend",
+        "price": 107453
+      },
+      {
+        "code": "MLWDPX4",
+        "name": "4x Weekly Diamond Pass",
+        "price": 111517
+      },
+      {
+        "code": "DML514",
+        "name": "514 (468+46) Diamond Mobile Legend",
+        "price": 129625
+      },
+      {
+        "code": "ML518",
+        "name": "518 Diamonds",
+        "price": 136196
+      },
+      {
+        "code": "MLWDPX5",
+        "name": "5x Weekly Diamond Pass",
+        "price": 139820
+      },
+      {
+        "code": "ML568",
+        "name": "568 Diamonds",
+        "price": 144399
+      },
+      {
+        "code": "MLTL",
+        "name": "Twilight Pass",
+        "price": 144589
+      },
+      {
+        "code": "ML554",
+        "name": "554 Diamond",
+        "price": 145905
+      },
+      {
+        "code": "DML600",
+        "name": "600 (568+32) Diamond Mobile Legend",
+        "price": 148330
+      },
+      {
+        "code": "DML706",
+        "name": "706 (625+81) Diamond Mobile Legend",
+        "price": 174578
+      },
+      {
+        "code": "ML716",
+        "name": "716 Diamonds",
+        "price": 183000
+      },
+      {
+        "code": "ML758",
+        "name": "758 Diamonds",
+        "price": 192007
+      },
+      {
+        "code": "ML750",
+        "name": "750 Diamond",
+        "price": 192087
+      },
+      {
+        "code": "ML790",
+        "name": "790 Diamonds",
+        "price": 203005
+      },
+      {
+        "code": "ML875",
+        "name": "875 Diamonds",
+        "price": 220078
+      },
+      {
+        "code": "DML963",
+        "name": "963 (859+104) Diamond Mobile Legend",
+        "price": 233978
+      },
+      {
+        "code": "ML1159",
+        "name": "1159 Diamonds",
+        "price": 289529
+      },
+      {
+        "code": "ML2010",
+        "name": "2010 Diamonds",
+        "price": 478164
+      }
+    ]
+  },
+  {
+    "name": "Mobile Legends Malaysia",
+    "slug": "mobile-legends-malaysia",
+    "icon": "🗡️",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "PRE29033419",
+        "name": "42 Diamonds",
+        "price": 12203
+      },
+      {
+        "code": "PRE29033421",
+        "name": "First Top Up 50+Bonus Diamonds",
+        "price": 16015
+      },
+      {
+        "code": "PRE29033420",
+        "name": "56 Diamonds",
+        "price": 16204
+      },
+      {
+        "code": "PRE29033423",
+        "name": "112 Diamonds",
+        "price": 32319
+      },
+      {
+        "code": "PRE29033424",
+        "name": "140 Diamonds",
+        "price": 40347
+      },
+      {
+        "code": "PRE29033426",
+        "name": "275 Diamonds",
+        "price": 80619
+      },
+      {
+        "code": "PRE29033427",
+        "name": "278 Diamonds",
+        "price": 80619
+      },
+      {
+        "code": "PRE29033430",
+        "name": "345 Diamonds",
+        "price": 100755
+      },
+      {
+        "code": "pre29033431",
+        "name": "355 Diamonds",
+        "price": 101447
+      },
+      {
+        "code": "pre29033432",
+        "name": "429 Diamonds",
+        "price": 123518
+      },
+      {
+        "code": "PRE29033433",
+        "name": "571 Diamonds",
+        "price": 165199
+      },
+      {
+        "code": "PRE29033417",
+        "name": "Twilight Pass",
+        "price": 175468
+      },
+      {
+        "code": "PRE29033435",
+        "name": "708 Diamonds",
+        "price": 201781
+      },
+      {
+        "code": "PRE29033437",
+        "name": "1.084 Diamonds",
+        "price": 303466
+      },
+      {
+        "code": "PRE29033438",
+        "name": "1.192 Diamonds",
+        "price": 334355
+      },
+      {
+        "code": "PRE29033439",
+        "name": "1.446 Diamonds",
+        "price": 402834
+      },
+      {
+        "code": "PRE29033440",
+        "name": "1.788 Diamonds",
+        "price": 503688
+      },
+      {
+        "code": "PRE29033441",
+        "name": "2.976 Diamonds",
+        "price": 807892
+      },
+      {
+        "code": "PRE29033442",
+        "name": "3.005 Diamonds",
+        "price": 841830
+      },
+      {
+        "code": "PRE29033443",
+        "name": "3.606 Diamonds",
+        "price": 989116
+      },
+      {
+        "code": "PRE29033444",
+        "name": "4.810 Diamonds",
+        "price": 1323439
+      },
+      {
+        "code": "PRE29033445",
+        "name": "6.012 Diamonds",
+        "price": 1657892
+      },
+      {
+        "code": "PRE29033446",
+        "name": "7.502 Diamonds",
+        "price": 2015819
+      }
+    ]
+  },
+  {
+    "name": "Moonlight Blade M",
+    "slug": "moonlight-blade-m",
+    "icon": "🌙",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "MLBLDPKT1",
+        "name": "Package 1",
+        "price": 4214
+      },
+      {
+        "code": "MLBLDPKTT1",
+        "name": "68 Ticket",
+        "price": 13472
+      },
+      {
+        "code": "MLBLDPKT2",
+        "name": "Package 2",
+        "price": 13472
+      },
+      {
+        "code": "MLBLDPKT3",
+        "name": "Package 3",
+        "price": 29464
+      },
+      {
+        "code": "MLBLDPKTT2",
+        "name": "217 Ticket + Bonus 12",
+        "price": 41247
+      },
+      {
+        "code": "MLBLDPKKN",
+        "name": "Card Package (Normal)",
+        "price": 54713
+      },
+      {
+        "code": "MLBLDEBP",
+        "name": "Elite Battle Pass",
+        "price": 54713
+      },
+      {
+        "code": "MLBLDPKTT3",
+        "name": "508 Ticket + Bonus 30",
+        "price": 91746
+      },
+      {
+        "code": "MLBLDPKKA",
+        "name": "Card Package (Advance)",
+        "price": 133829
+      },
+      {
+        "code": "MLBLDEKC",
+        "name": "Elite to Collector",
+        "price": 133829
+      },
+      {
+        "code": "MLBLDPKTT4",
+        "name": "945 Ticket + Bonus 60",
+        "price": 175912
+      },
+      {
+        "code": "MLBLDDP1",
+        "name": "Growth Fund 1",
+        "price": 175912
+      },
+      {
+        "code": "MLBLDCBP",
+        "name": "Collector Battle Pass",
+        "price": 192745
+      },
+      {
+        "code": "MLBLDDP2",
+        "name": "Growth Fund 2",
+        "price": 251661
+      },
+      {
+        "code": "MLBLDPKT1M",
+        "name": "1 Week Package",
+        "price": 260078
+      },
+      {
+        "code": "MLBLDPKTT5",
+        "name": "1527 Ticket + Bonus 110",
+        "price": 293744
+      },
+      {
+        "code": "MLBLDDP3",
+        "name": "Growth Fund 3",
+        "price": 318994
+      }
+    ]
+  },
+  {
+    "name": "MU Origin 3",
+    "slug": "mu-origin-3",
+    "icon": "⚔️",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "MU70",
+        "name": "70 Divine Diamonds",
+        "price": 13663
+      },
+      {
+        "code": "MU350",
+        "name": "350 Divine Diamonds",
+        "price": 67456
+      },
+      {
+        "code": "MU1050",
+        "name": "1050 Divine Diamonds",
+        "price": 222045
+      }
+    ]
+  },
+  {
+    "name": "Naruto Slugfest X",
+    "slug": "naruto-slugfest-x",
+    "icon": "🍜",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "NSX60",
+        "name": "60 Banknotes",
+        "price": 11165
+      },
+      {
+        "code": "NSX300",
+        "name": "300 Banknotes",
+        "price": 56933
+      },
+      {
+        "code": "NSX980",
+        "name": "980 Banknotes",
+        "price": 171364
+      },
+      {
+        "code": "NSX1980",
+        "name": "1980 Banknotes",
+        "price": 371617
+      }
+    ]
+  },
+  {
+    "name": "Never After",
+    "slug": "never-after",
+    "icon": "💔",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "NA69",
+        "name": "69 Diamonds",
+        "price": 12002
+      },
+      {
+        "code": "NADP",
+        "name": "Daily Specials",
+        "price": 12002
+      },
+      {
+        "code": "NADF",
+        "name": "Daily Feedback",
+        "price": 36853
+      },
+      {
+        "code": "NAPS",
+        "name": "Promotion Pass",
+        "price": 48279
+      },
+      {
+        "code": "NA366",
+        "name": "366 (349+17 Diamonds)",
+        "price": 62561
+      },
+      {
+        "code": "NADS",
+        "name": "Daily Selection",
+        "price": 62561
+      },
+      {
+        "code": "NASA",
+        "name": "Senior Adventurer",
+        "price": 62561
+      },
+      {
+        "code": "NA670",
+        "name": "670 (629+41 Diamonds)",
+        "price": 113978
+      },
+      {
+        "code": "NAPP",
+        "name": "Premium Pass",
+        "price": 128260
+      },
+      {
+        "code": "NAUA",
+        "name": "Upgrade Awards",
+        "price": 128260
+      },
+      {
+        "code": "NAGF",
+        "name": "Growth Fund",
+        "price": 168509
+      },
+      {
+        "code": "NA1134",
+        "name": "1134 (1049+85 Diamonds)",
+        "price": 191103
+      },
+      {
+        "code": "NAGA",
+        "name": "Great Adventure",
+        "price": 191103
+      },
+      {
+        "code": "NA1552",
+        "name": "1552 (1399+153 Diamonds)",
+        "price": 253945
+      },
+      {
+        "code": "NA2353",
+        "name": "2353 (2099+254 Diamonds)",
+        "price": 371061
+      }
+    ]
+  },
+  {
+    "name": "Omega Legend",
+    "slug": "omega-legend",
+    "icon": "🌌",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "GPOL129",
+        "name": "129 Gold",
+        "price": 14287
+      },
+      {
+        "code": "GPOL258",
+        "name": "258 Gold",
+        "price": 29619
+      },
+      {
+        "code": "GPOL828",
+        "name": "828 Gold",
+        "price": 85699
+      },
+      {
+        "code": "GPOL1429",
+        "name": "1429 Gold",
+        "price": 142829
+      },
+      {
+        "code": "GPOL2927",
+        "name": "2927 Gold",
+        "price": 285653
+      }
+    ]
+  },
+  {
+    "name": "One Punch Man",
+    "slug": "one-punch-man",
+    "icon": "👊",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "OPM6",
+        "name": "6 Kupon",
+        "price": 8363
+      },
+      {
+        "code": "OPM13",
+        "name": "13 Kupon",
+        "price": 23802
+      },
+      {
+        "code": "OPM22",
+        "name": "22 Kupon",
+        "price": 33771
+      },
+      {
+        "code": "OPM54",
+        "name": "54 Kupon",
+        "price": 84421
+      },
+      {
+        "code": "OPM107",
+        "name": "107 Kupon",
+        "price": 168837
+      },
+      {
+        "code": "OPM91",
+        "name": "91 Kupon",
+        "price": 178481
+      }
+    ]
+  },
+  {
+    "name": "Point Blank",
+    "slug": "point-blank",
+    "icon": "🎮",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "PBC10",
+        "name": "1.200 PB Cash",
+        "price": 9011
+      },
+      {
+        "code": "PBC20",
+        "name": "2.400 PB Cash",
+        "price": 18017
+      },
+      {
+        "code": "PBC50",
+        "name": "6.000 PB Cash",
+        "price": 45035
+      },
+      {
+        "code": "PBC100",
+        "name": "12.000 PB Cash",
+        "price": 90063
+      },
+      {
+        "code": "PBC200",
+        "name": "24.000 PB Cash (12.000+12.000)",
+        "price": 180121
+      },
+      {
+        "code": "PBC250",
+        "name": "30.000 PB Cash (12.000 +12.000+ 6.000)",
+        "price": 225151
+      },
+      {
+        "code": "PBC300",
+        "name": "36.000 PB Cash",
+        "price": 270179
+      }
+    ]
+  },
+  {
+    "name": "Project Entropy",
+    "slug": "project-entropy",
+    "icon": "🚀",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "PE100",
+        "name": "100 Star Chips",
+        "price": 18263
+      },
+      {
+        "code": "PE500",
+        "name": "500 Star Chips",
+        "price": 91324
+      },
+      {
+        "code": "PE1000",
+        "name": "1000 Star Chips",
+        "price": 182584
+      },
+      {
+        "code": "PE2099",
+        "name": "2099 Star Chips",
+        "price": 365163
+      }
+    ]
+  },
+  {
+    "name": "PUBG Mobile",
+    "slug": "pubg-mobile",
+    "icon": "🪂",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "PMI780",
+        "name": "780 (720+60) UC",
+        "price": 184793
+      },
+      {
+        "code": "PMI1500",
+        "name": "1500 (1380+120) UC",
+        "price": 354239
+      },
+      {
+        "code": "PMI1800",
+        "name": "1800 (1500+300) UC",
+        "price": 385596
+      }
+    ]
+  },
+  {
+    "name": "Punishing Gray Raven",
+    "slug": "punishing-gray-raven",
+    "icon": "⚙️",
+    "needsZoneId": false,
+    "needsNick": true,
+    "products": [
+      {
+        "code": "PGRA5RC",
+        "name": "(Android) 5 Rainbow Cards",
+        "price": 12836
+      },
+      {
+        "code": "PGRI5RC",
+        "name": "(iOS) 5 Rainbow Cards",
+        "price": 12836
+      },
+      {
+        "code": "PGRA28RC",
+        "name": "(Android) 28 Rainbow Cards",
+        "price": 61542
+      },
+      {
+        "code": "PGRI28RC",
+        "name": "(iOS) 28 Rainbow Cards",
+        "price": 61542
+      },
+      {
+        "code": "PGRA34RC",
+        "name": "(Android) 34 Rainbow Cards",
+        "price": 77253
+      },
+      {
+        "code": "PGRI34RC",
+        "name": "(iOS) 34 Rainbow Cards",
+        "price": 77253
+      },
+      {
+        "code": "PGRA59RC",
+        "name": "(Android) 59 Rainbow Cards",
+        "price": 125697
+      },
+      {
+        "code": "PGRI59RC",
+        "name": "(iOS) 59 Rainbow Cards",
+        "price": 125697
+      },
+      {
+        "code": "PGRA71RC",
+        "name": "(Android) 71 Rainbow Cards",
+        "price": 150573
+      },
+      {
+        "code": "PGRI71RC",
+        "name": "(iOS) 71 Rainbow Cards",
+        "price": 150573
+      },
+      {
+        "code": "PGRA119RC",
+        "name": "(Android) 119 Rainbow Cards",
+        "price": 255316
+      },
+      {
+        "code": "PGRI119RC",
+        "name": "(iOS) 119 Rainbow Cards",
+        "price": 255316
+      }
+    ]
+  },
+  {
+    "name": "Ragnarok M Eternal Love",
+    "slug": "ragnarok-m-eternal-love",
+    "icon": "🌹",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "RKM6",
+        "name": "6 Big Cat Coins",
+        "price": 14728
+      },
+      {
+        "code": "RKM12",
+        "name": "12 Big Cat Coins",
+        "price": 28116
+      },
+      {
+        "code": "RKM18",
+        "name": "18 Big Cat Coins",
+        "price": 42834
+      },
+      {
+        "code": "RKM24",
+        "name": "24 Big Cat Coins",
+        "price": 57558
+      },
+      {
+        "code": "RKM36",
+        "name": "36 Big Cat Coins (S)",
+        "price": 71069
+      },
+      {
+        "code": "RKM72",
+        "name": "72 Big Cat Coins",
+        "price": 141830
+      },
+      {
+        "code": "RKM145",
+        "name": "145 Big Cat Coins (M)",
+        "price": 284088
+      }
+    ]
+  },
+  {
+    "name": "Ragnarok Origin Global",
+    "slug": "ragnarok-origin-global",
+    "icon": "⚔️",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "ROOG40",
+        "name": "40 Nyan Berry",
+        "price": 12714
+      },
+      {
+        "code": "ROOG125",
+        "name": "125 Nyan Berry",
+        "price": 38929
+      },
+      {
+        "code": "ROOG210",
+        "name": "210 Nyan Berry",
+        "price": 63490
+      },
+      {
+        "code": "ROOG430",
+        "name": "430 Nyan Berry",
+        "price": 127800
+      },
+      {
+        "code": "ROOG900",
+        "name": "900 Nyan Berry",
+        "price": 264086
+      }
+    ]
+  },
+  {
+    "name": "Ragnarok X",
+    "slug": "ragnarok-x",
+    "icon": "💫",
+    "needsZoneId": true,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "ROX2080",
+        "name": "2080 Diamonds",
+        "price": 72214
+      },
+      {
+        "code": "ROX2110",
+        "name": "2110 Diamonds",
+        "price": 73850
+      },
+      {
+        "code": "ROX2360",
+        "name": "2360 Diamonds",
+        "price": 74323
+      },
+      {
+        "code": "ROX4150",
+        "name": "4150 Diamonds",
+        "price": 144422
+      },
+      {
+        "code": "ROX4210",
+        "name": "4210 Diamonds",
+        "price": 147547
+      },
+      {
+        "code": "ROX4720",
+        "name": "4720 Diamonds",
+        "price": 151311
+      },
+      {
+        "code": "ROXCOEK",
+        "name": "Covenant of Encouragement (Kafra W)",
+        "price": 205836
+      },
+      {
+        "code": "ROX6910",
+        "name": "6910 Diamonds",
+        "price": 240698
+      },
+      {
+        "code": "ROX9490",
+        "name": "9490 Diamonds",
+        "price": 302617
+      },
+      {
+        "code": "ROX_9490",
+        "name": "9490 Diamonds",
+        "price": 302617
+      }
+    ]
+  },
+  {
+    "name": "Revelation Instan",
+    "slug": "revelation-instan",
+    "icon": "👁️",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "RVLNMKB7",
+        "name": "Monthly Card (7 Days)",
+        "price": 8320
+      },
+      {
+        "code": "RVLNMPP",
+        "name": "Newbie Pack",
+        "price": 8321
+      },
+      {
+        "code": "RVL40",
+        "name": "40 + 6 Jade",
+        "price": 8640
+      },
+      {
+        "code": "RVL110",
+        "name": "110 + 17 Jade",
+        "price": 21593
+      },
+      {
+        "code": "RVL230",
+        "name": "230 + 35 Jade",
+        "price": 43180
+      },
+      {
+        "code": "RVLNMBPC",
+        "name": "Battle Pass Classic",
+        "price": 54054
+      },
+      {
+        "code": "RVLNMPD",
+        "name": "Discount Package",
+        "price": 54054
+      },
+      {
+        "code": "RVLNMKBK",
+        "name": "Monthly Card - Classic",
+        "price": 54054
+      },
+      {
+        "code": "RVL460",
+        "name": "460 + 69 Jade",
+        "price": 86356
+      },
+      {
+        "code": "RVLNMBPS",
+        "name": "Battlepass - Special",
+        "price": 108102
+      },
+      {
+        "code": "RVLNMGF",
+        "name": "Growth Fund",
+        "price": 108102
+      },
+      {
+        "code": "RVLNMKBS",
+        "name": "Monthly Card - Superior",
+        "price": 108102
+      },
+      {
+        "code": "RVLNMPS",
+        "name": "Special Package",
+        "price": 108102
+      },
+      {
+        "code": "RVL920",
+        "name": "920 + 138 Jade",
+        "price": 172706
+      },
+      {
+        "code": "RVL1150",
+        "name": "1150 + 173 Jade",
+        "price": 215882
+      },
+      {
+        "code": "RVL1380",
+        "name": "1380 + 207 Jade",
+        "price": 259057
+      },
+      {
+        "code": "RVL1610",
+        "name": "1610 + 242 Jade",
+        "price": 302233
+      }
+    ]
+  },
+  {
+    "name": "Saint Seiya",
+    "slug": "saint-seiya",
+    "icon": "♈",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "SAINT60",
+        "name": "60 Coupons",
+        "price": 11209
+      },
+      {
+        "code": "SAINT300",
+        "name": "300 Coupons",
+        "price": 56898
+      },
+      {
+        "code": "SAINT600",
+        "name": "600 Coupons",
+        "price": 113041
+      },
+      {
+        "code": "SAINT1200",
+        "name": "1200 Coupons",
+        "price": 228438
+      },
+      {
+        "code": "SAINT1800",
+        "name": "1800 Coupons",
+        "price": 371388
+      }
+    ]
+  },
+  {
+    "name": "Seal M Sea",
+    "slug": "seal-m-sea",
+    "icon": "🦭",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "SEALM123",
+        "name": "123 Ruby + 123 Mileage Coin",
+        "price": 14104
+      },
+      {
+        "code": "SEALM250",
+        "name": "250 Ruby + 250 Mileage Coin",
+        "price": 28203
+      },
+      {
+        "code": "SEALM775",
+        "name": "775 Ruby + 775 Mileage Coin",
+        "price": 85045
+      },
+      {
+        "code": "SEALM1300",
+        "name": "1300 Ruby + 1300 Mileage Coin",
+        "price": 141785
+      },
+      {
+        "code": "SEALM2650",
+        "name": "2650 Ruby + 2650 Mileage Coin",
+        "price": 283423
+      }
+    ]
+  },
+  {
+    "name": "Speed Drifters",
+    "slug": "speed-drifters",
+    "icon": "🏁",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "SD56",
+        "name": "56 Diamonds",
+        "price": 9126
+      },
+      {
+        "code": "SD112",
+        "name": "112 Diamonds",
+        "price": 18247
+      },
+      {
+        "code": "SD282",
+        "name": "282 Diamonds",
+        "price": 45610
+      },
+      {
+        "code": "SD579",
+        "name": "579 Diamonds",
+        "price": 91215
+      },
+      {
+        "code": "SD1230",
+        "name": "1230 Diamonds",
+        "price": 182424
+      },
+      {
+        "code": "SD1845",
+        "name": "1845 Diamonds",
+        "price": 273634
+      }
+    ]
+  },
+  {
+    "name": "State of Survival Zombie War",
+    "slug": "state-of-survival",
+    "icon": "🧟",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "SOS1",
+        "name": "100 Diamonds",
+        "price": 15622
+      },
+      {
+        "code": "SOS5",
+        "name": "500 Diamonds",
+        "price": 78088
+      },
+      {
+        "code": "SOS10",
+        "name": "1000 Diamonds",
+        "price": 156170
+      },
+      {
+        "code": "SOS20",
+        "name": "2000 Diamonds",
+        "price": 308511
+      }
+    ]
+  },
+  {
+    "name": "Super SUS",
+    "slug": "super-sus",
+    "icon": "🔍",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "SUS100",
+        "name": "100 Golder Star",
+        "price": 10634
+      },
+      {
+        "code": "SUS310",
+        "name": "310 Golder Star",
+        "price": 31293
+      },
+      {
+        "code": "SUS520",
+        "name": "520 Golder Star",
+        "price": 53300
+      },
+      {
+        "code": "SUS1060",
+        "name": "1.060 Golder Star",
+        "price": 106745
+      },
+      {
+        "code": "SUS2180",
+        "name": "2.180 Golder Star",
+        "price": 213484
+      }
+    ]
+  },
+  {
+    "name": "Tarisland",
+    "slug": "tarisland",
+    "icon": "🏔️",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "TARS60",
+        "name": "60 Crystals",
+        "price": 13796
+      },
+      {
+        "code": "TARSWT",
+        "name": "Weekly Ticket",
+        "price": 17041
+      },
+      {
+        "code": "TARSMT",
+        "name": "Monthly Ticket",
+        "price": 50302
+      },
+      {
+        "code": "TARS330",
+        "name": "330 Crystals",
+        "price": 67338
+      },
+      {
+        "code": "TARS700",
+        "name": "700 Crystals",
+        "price": 137104
+      },
+      {
+        "code": "TARSST",
+        "name": "Semiannual Ticket",
+        "price": 283126
+      },
+      {
+        "code": "TARS1800",
+        "name": "1800 Crystals",
+        "price": 323688
+      }
+    ]
+  },
+  {
+    "name": "The Ants : Underground Kingdom",
+    "slug": "the-ants",
+    "icon": "🐜",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "TAC100",
+        "name": "100 Coin",
+        "price": 14456
+      },
+      {
+        "code": "TAC500",
+        "name": "500 Coin",
+        "price": 71354
+      },
+      {
+        "code": "TAC1000",
+        "name": "1.000 Coin",
+        "price": 143606
+      },
+      {
+        "code": "TAC1500",
+        "name": "1.500 Coin",
+        "price": 224890
+      },
+      {
+        "code": "TAC2000",
+        "name": "2.000 Coin",
+        "price": 297141
+      },
+      {
+        "code": "TAC2500",
+        "name": "2.500 Coin",
+        "price": 360362
+      }
+    ]
+  },
+  {
+    "name": "Tom And Jerry Chase",
+    "slug": "tom-and-jerry-chase",
+    "icon": "🐭",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "GPTJ60",
+        "name": "60 Diamond",
+        "price": 14454
+      },
+      {
+        "code": "GPTJ180",
+        "name": "180 Diamond",
+        "price": 42389
+      },
+      {
+        "code": "GPTJ300",
+        "name": "300 Diamond",
+        "price": 70323
+      },
+      {
+        "code": "GPTJ600",
+        "name": "600 Diamond",
+        "price": 143530
+      },
+      {
+        "code": "GPTJ1200",
+        "name": "1200 Diamond",
+        "price": 288018
+      }
+    ]
+  },
+  {
+    "name": "Undawn",
+    "slug": "undawn",
+    "icon": "🌅",
+    "needsZoneId": false,
+    "needsNick": true,
+    "products": [
+      {
+        "code": "GUDW80_S1",
+        "name": "80 RC (No Garena)",
+        "price": 13809
+      },
+      {
+        "code": "GUDWM_S1",
+        "name": "Kartu Mingguan (No Garena)",
+        "price": 26507
+      },
+      {
+        "code": "GUDW250_S1",
+        "name": "250 RC (No Garena)",
+        "price": 41415
+      },
+      {
+        "code": "GUDWB_S1",
+        "name": "Kartu Bulanan (No Garena)",
+        "price": 43900
+      },
+      {
+        "code": "GUDW450_S1",
+        "name": "450 RC (No Garena)",
+        "price": 69021
+      },
+      {
+        "code": "GUDWGF_S1",
+        "name": "Growht Fund (No Garena)",
+        "price": 88070
+      },
+      {
+        "code": "GUDWERS1",
+        "name": "Dana Elit (No Garena)",
+        "price": 116780
+      },
+      {
+        "code": "GUDW920_S1",
+        "name": "920 RC (No Garena)",
+        "price": 136657
+      },
+      {
+        "code": "GUDW1850_S1",
+        "name": "1850 RC (No Garena)",
+        "price": 273308
+      }
+    ]
+  },
+  {
+    "name": "Ys 6 Mobile",
+    "slug": "ys-6-mobile",
+    "icon": "⚔️",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "YSM80",
+        "name": "80 (60+20) Emelas",
+        "price": 10881
+      },
+      {
+        "code": "YSM400",
+        "name": "400 (300+100) Emelas",
+        "price": 53482
+      },
+      {
+        "code": "YSM920",
+        "name": "920 (680+240) Emelas",
+        "price": 119648
+      },
+      {
+        "code": "YSM1800",
+        "name": "1800 (1280+520) Emelas",
+        "price": 223882
+      },
+      {
+        "code": "YSM2800",
+        "name": "2800 (1980+820) Emelas",
+        "price": 344432
+      }
+    ]
+  },
+  {
+    "name": "Voucher Game Garena Shell",
+    "slug": "garena-shell",
+    "icon": "🐚",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "VGS33",
+        "name": "33 Shell (Murah)",
+        "price": 9291
+      },
+      {
+        "code": "VGS66",
+        "name": "66 Shell (Murah)",
+        "price": 18506
+      },
+      {
+        "code": "VGS165",
+        "name": "165 Shell (Murah)",
+        "price": 46006
+      },
+      {
+        "code": "VGS330",
+        "name": "330 Shell (Murah)",
+        "price": 92528
+      }
+    ]
+  },
+  {
+    "name": "Voucher Game Google Play ID",
+    "slug": "google-play",
+    "icon": "🎮",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "VGP5",
+        "name": "Google Play Rp5.000 (ID)",
+        "price": 4948
+      },
+      {
+        "code": "VGP10",
+        "name": "Google Play Rp10.000 (ID)",
+        "price": 9891
+      },
+      {
+        "code": "VGP20",
+        "name": "Google Play Rp20.000 (ID)",
+        "price": 20164
+      },
+      {
+        "code": "VGP50",
+        "name": "Google Play Rp50.000 (ID)",
+        "price": 49437
+      },
+      {
+        "code": "VGP100",
+        "name": "Google Play Rp100.000 (ID)",
+        "price": 98868
+      },
+      {
+        "code": "VGP150",
+        "name": "Google Play Rp150.000 (ID)",
+        "price": 148300
+      },
+      {
+        "code": "VGP300",
+        "name": "Google Play Rp300.000 (ID)",
+        "price": 296593
+      }
+    ]
+  },
+  {
+    "name": "Voucher Game Steam Wallet",
+    "slug": "steam-wallet",
+    "icon": "💻",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "STMID6",
+        "name": "Steam Wallet IDR 6.000",
+        "price": 6079
+      },
+      {
+        "code": "STMID8",
+        "name": "Steam Wallet IDR 8.000",
+        "price": 8068
+      },
+      {
+        "code": "STMID12",
+        "name": "Steam Wallet IDR 12.000",
+        "price": 12000
+      },
+      {
+        "code": "STMID45",
+        "name": "Steam Wallet IDR 45.000",
+        "price": 44299
+      },
+      {
+        "code": "STMID60",
+        "name": "Steam Wallet IDR 60.000",
+        "price": 59114
+      },
+      {
+        "code": "STMID90",
+        "name": "Steam Wallet IDR 90.000",
+        "price": 89000
+      },
+      {
+        "code": "STMID120",
+        "name": "Steam Wallet IDR 120.000",
+        "price": 119875
+      },
+      {
+        "code": "STMID250",
+        "name": "Steam Wallet IDR 250.000",
+        "price": 250505
+      }
+    ]
+  },
+  {
+    "name": "Voucher Point Blank",
+    "slug": "voucher-point-blank",
+    "icon": "🎯",
+    "needsZoneId": false,
+    "needsNick": false,
+    "products": [
+      {
+        "code": "PB1200",
+        "name": "1200 PB Cash",
+        "price": 9196
+      },
+      {
+        "code": "PB2400",
+        "name": "2400 PB Cash",
+        "price": 18389
+      },
+      {
+        "code": "PB6000",
+        "name": "6000 PB Cash",
+        "price": 45965
+      },
+      {
+        "code": "PB12000",
+        "name": "12000 PB Cash",
+        "price": 91926
+      },
+      {
+        "code": "PB24000",
+        "name": "24000 PB Cash",
+        "price": 183846
+      },
+      {
+        "code": "PB36000",
+        "name": "36000 PB Cash",
+        "price": 275768
+      }
+    ]
+  }
+]

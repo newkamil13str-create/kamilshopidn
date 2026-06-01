@@ -10,7 +10,6 @@ export interface User {
   referralCode?: string;
   referredBy?: string;
   affiliateBalance?: number;
-  balance?: number;
   createdAt?: Timestamp | Date;
 }
 
@@ -25,6 +24,10 @@ export interface Product {
   category: string;
   imageUrl: string;
   badge: 'bestseller' | 'new' | '' | 'flash-sale';
+  productType?: 'digital' | 'topup-game';
+  qiospayProduct?: string;
+  gameName?: string;
+  needsZoneId?: boolean;
   rating: number;
   ratingCount?: number;
   totalSold: number;
@@ -66,9 +69,18 @@ export interface Order {
   promoCode?: string;
   discount?: number;
   affiliateCode?: string;
+  // Topup game fields
+  productType?: 'digital' | 'topup-game';
+  gameName?: string;
+  qiospayProduct?: string;
+  gameDestination?: string;
+  gameZoneId?: string;
+  topupSent?: boolean;
+  topupStatus?: string;
+  topupNote?: string;
+  topupRaw?: string;
   createdAt?: Timestamp | Date;
   paidAt?: Timestamp | Date;
-  cancelledAt?: Timestamp | Date;
 }
 
 export interface PromoCode {
@@ -82,24 +94,6 @@ export interface PromoCode {
   isActive: boolean;
   expiredAt?: string;
   createdAt?: Timestamp | Date;
-}
-
-export interface Deposit {
-  id?: string;
-  depositId: string;
-  userId: string;
-  customerName: string;
-  customerEmail: string;
-  amount: number;
-  fee: number;
-  totalPayment: number;
-  paymentMethod: string;
-  paymentNumber: string;
-  expiredAt: string;
-  status: 'pending' | 'paid' | 'failed' | 'cancelled';
-  createdAt?: Timestamp | Date;
-  paidAt?: Timestamp | Date;
-  cancelledAt?: Timestamp | Date;
 }
 
 export interface AffiliateTransaction {
@@ -131,8 +125,6 @@ export interface SiteSettings {
   tagline?: string;
   affiliateCommissionPercent?: number;
   affiliateMinWithdraw?: number;
-  depositMin?: number;
-  depositMax?: number;
 }
 
 export interface CartItem {
@@ -165,4 +157,19 @@ export interface AdminStats {
   pendingOrders: number;
   totalProducts: number;
   totalCustomers: number;
+}
+
+export interface GameProduct {
+  code: string;
+  name: string;
+  price: number;
+}
+
+export interface GameData {
+  name: string;
+  slug: string;
+  icon: string;
+  needsZoneId: boolean;
+  needsNick: boolean;
+  products: GameProduct[];
 }

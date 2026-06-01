@@ -60,35 +60,24 @@ export async function POST(req: NextRequest) {
     const transporter = nodemailer.createTransport({
       host:   process.env.SMTP_HOST || 'smtp.gmail.com',
       port:   Number(process.env.SMTP_PORT || 587),
-      secure: process.env.SMTP_PORT === '465',
+      secure: false,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-      tls: { rejectUnauthorized: false },
     });
 
     await transporter.sendMail({
-      from:        `"KAMIL-SHOP" <${process.env.SMTP_USER}>`,
-      to:          email,
-      subject:     'Kode OTP Login KAMIL-SHOP',
-      // Header anti-spam — bantu email masuk ke Inbox bukan Spam
-      headers: {
-        'X-Priority':           '1',
-        'X-MSMail-Priority':    'High',
-        'Importance':           'high',
-        'X-Mailer':             'KAMIL-SHOP Mailer',
-        'List-Unsubscribe':     `<mailto:${process.env.SMTP_USER}?subject=unsubscribe>`,
-        'Precedence':           'transactional',
-        'Auto-Submitted':       'auto-generated',
-      },
+      from:    `"KAMIL-SHOP" <${process.env.SMTP_USER}>`,
+      to:      email,
+      subject: '🔐 Kode OTP Login KAMIL-SHOP',
       html: `
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#0A0F1E;color:white;border-radius:16px;overflow:hidden;">
           <div style="background:linear-gradient(135deg,#2563EB,#1D4ED8);padding:28px;text-align:center;">
             <h1 style="margin:0;font-size:24px;font-weight:800;letter-spacing:2px;">KAMIL-SHOP</h1>
           </div>
           <div style="padding:32px;">
-            <h2 style="color:#F59E0B;margin-top:0;">Kode OTP Login Anda</h2>
+            <h2 style="color:#F59E0B;margin-top:0;">🔐 Kode OTP Anda</h2>
             <p style="color:rgba(255,255,255,0.7);">Gunakan kode berikut untuk login ke KAMIL-SHOP:</p>
             <div style="background:rgba(37,99,235,0.15);border:2px solid rgba(37,99,235,0.4);border-radius:12px;padding:24px;text-align:center;margin:20px 0;">
               <span style="font-size:40px;font-weight:bold;letter-spacing:14px;color:#F59E0B;">${code}</span>

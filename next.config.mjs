@@ -8,9 +8,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'iili.io' },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ['nodemailer'],
-  },
+  serverExternalPackages: ['nodemailer'],
   async headers() {
     return [
       {

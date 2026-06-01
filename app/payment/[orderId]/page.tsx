@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QRCodeSVG } from 'qrcode.react';
-import { Copy, CheckCircle, Clock, RefreshCw, ArrowRight, AlertTriangle, XCircle, Ban } from 'lucide-react';
+import { Copy, CheckCircle, Clock, RefreshCw, ArrowRight, AlertTriangle } from 'lucide-react';
 import { subscribeToOrder } from '@/lib/firestore';
 import { formatCurrency, getStatusColor, getStatusLabel } from '@/lib/utils';
 import { getTimeRemaining, PAYMENT_METHODS } from '@/lib/pakasir';
@@ -19,35 +19,12 @@ export default function PaymentPage() {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0, total: 0 });
   const [copied, setCopied] = useState(false);
   const [checking, setChecking] = useState(false);
-  const [cancelling, setCancelling] = useState(false);
-  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-  const prevStatusRef = useRef<string | null>(null);
 
-  // Subscribe to order realtime — auto-react saat status berubah
+  // Subscribe to order realtime
   useEffect(() => {
     const unsub = subscribeToOrder(orderId as string, (ord) => {
       setOrder(ord);
       setLoading(false);
-
-      if (!ord) return;
-
-      const prev = prevStatusRef.current;
-      const curr = ord.status;
-
-      // Baru pertama kali atau status berubah
-      if (prev !== null && prev !== curr) {
-        if (curr === 'delivered') {
-          toast.success('🎉 Pembayaran berhasil! Produk siap digunakan.');
-        } else if (curr === 'paid') {
-          toast.success('✅ Pembayaran diterima! Memproses pesanan...');
-        } else if (curr === 'failed') {
-          toast.error('❌ Pembayaran gagal atau kadaluarsa.');
-        } else if (curr === 'cancelled') {
-          toast('🚫 Order telah dibatalkan.', { icon: '🚫' });
-        }
-      }
-
-      prevStatusRef.current = curr;
     });
     return () => unsub();
   }, [orderId]);
@@ -61,7 +38,7 @@ export default function PaymentPage() {
     return () => clearInterval(id);
   }, [order?.expiredAt]);
 
-  // Auto-check payment status dari Pakasir setiap 10 detik
+  // Auto-check payment every 10 seconds
   const checkPayment = useCallback(async () => {
     if (!orderId || checking) return;
     setChecking(true);
@@ -74,40 +51,15 @@ export default function PaymentPage() {
 
   useEffect(() => {
     if (!order || order.status !== 'pending') return;
-    // Langsung cek sekali saat mount
-    checkPayment();
     const id = setInterval(checkPayment, 10000);
     return () => clearInterval(id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order?.status]);
+  }, [order, checkPayment]);
 
   const handleCopy = async (text: string) => {
     await navigator.clipboard.writeText(text);
     setCopied(true);
     toast.success('Disalin ke clipboard!');
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleCancel = async () => {
-    if (!orderId || cancelling) return;
-    setCancelling(true);
-    try {
-      const res = await fetch('/api/cancel-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        toast.error(data.error || 'Gagal membatalkan order');
-      }
-      // Status akan update otomatis via Firestore realtime listener
-    } catch {
-      toast.error('Terjadi kesalahan, coba lagi');
-    } finally {
-      setCancelling(false);
-      setShowCancelConfirm(false);
-    }
   };
 
   const methodInfo = PAYMENT_METHODS.find((m) => m.id === order?.paymentMethod);
@@ -151,10 +103,8 @@ export default function PaymentPage() {
           <p className="text-white/40 text-sm mt-1">Selesaikan Pembayaran</p>
         </motion.div>
 
-        {/* Status Panels */}
+        {/* Status */}
         <AnimatePresence mode="wait">
-
-          {/* ── DELIVERED ── */}
           {order.status === 'delivered' && (
             <motion.div
               key="delivered"
@@ -194,24 +144,6 @@ export default function PaymentPage() {
             </motion.div>
           )}
 
-          {/* ── PAID (sedang diproses) ── */}
-          {order.status === 'paid' && (
-            <motion.div
-              key="paid"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="glass rounded-3xl p-8 border border-electric-600/20 mb-6 text-center"
-            >
-              <div className="w-20 h-20 rounded-full bg-electric-600/10 flex items-center justify-center mx-auto mb-5">
-                <div className="w-10 h-10 border-2 border-electric-600/40 border-t-electric-400 rounded-full animate-spin" />
-              </div>
-              <h2 className="text-white font-display text-2xl font-bold mb-2">Pembayaran Diterima!</h2>
-              <p className="text-white/50 mb-2">Sedang memproses pengiriman produk...</p>
-              <p className="text-white/30 text-sm">Halaman akan otomatis diperbarui</p>
-            </motion.div>
-          )}
-
-          {/* ── FAILED ── */}
           {order.status === 'failed' && (
             <motion.div
               key="failed"
@@ -219,9 +151,7 @@ export default function PaymentPage() {
               animate={{ opacity: 1, scale: 1 }}
               className="glass rounded-3xl p-8 border border-red-400/20 mb-6 text-center"
             >
-              <div className="w-20 h-20 rounded-full bg-red-400/10 flex items-center justify-center mx-auto mb-5">
-                <XCircle size={40} className="text-red-400" />
-              </div>
+              <AlertTriangle size={48} className="text-red-400 mx-auto mb-4" />
               <h2 className="text-white font-display text-2xl font-bold mb-2">Pembayaran Gagal</h2>
               <p className="text-white/50 mb-6">Transaksi telah kadaluarsa atau gagal diproses</p>
               <button
@@ -233,30 +163,6 @@ export default function PaymentPage() {
             </motion.div>
           )}
 
-          {/* ── CANCELLED ── */}
-          {order.status === 'cancelled' && (
-            <motion.div
-              key="cancelled"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="glass rounded-3xl p-8 border border-orange-400/20 mb-6 text-center"
-            >
-              <div className="w-20 h-20 rounded-full bg-orange-400/10 flex items-center justify-center mx-auto mb-5">
-                <Ban size={40} className="text-orange-400" />
-              </div>
-              <h2 className="text-white font-display text-2xl font-bold mb-2">Order Dibatalkan</h2>
-              <p className="text-white/50 mb-2">Order <span className="text-white/70 font-mono">{order.orderId}</span> telah dibatalkan.</p>
-              <p className="text-white/30 text-sm mb-6">Tidak ada biaya yang dikenakan.</p>
-              <button
-                onClick={() => router.push('/')}
-                className="w-full py-3.5 rounded-2xl bg-electric-gradient text-white font-semibold"
-              >
-                Kembali ke Beranda
-              </button>
-            </motion.div>
-          )}
-
-          {/* ── PENDING ── */}
           {order.status === 'pending' && (
             <motion.div key="pending" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
               {/* Countdown */}
@@ -379,7 +285,7 @@ export default function PaymentPage() {
               </div>
 
               {/* Auto check status */}
-              <div className="flex items-center justify-between glass rounded-xl p-3.5 mb-4">
+              <div className="flex items-center justify-between glass rounded-xl p-3.5">
                 <div className="flex items-center gap-2 text-white/40 text-sm">
                   <RefreshCw size={14} className={checking ? 'animate-spin text-electric-400' : ''} />
                   {checking ? 'Mengecek status...' : 'Auto cek setiap 10 detik'}
@@ -392,45 +298,6 @@ export default function PaymentPage() {
                   Cek Sekarang
                 </button>
               </div>
-
-              {/* Cancel Button */}
-              {!showCancelConfirm ? (
-                <button
-                  onClick={() => setShowCancelConfirm(true)}
-                  className="w-full py-3 rounded-2xl glass border border-red-400/20 text-red-400/60 text-sm hover:text-red-400 hover:border-red-400/40 hover:bg-red-400/5 transition-all flex items-center justify-center gap-2"
-                >
-                  <Ban size={14} />
-                  Batalkan Order
-                </button>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="glass rounded-2xl p-4 border border-red-400/30"
-                >
-                  <p className="text-white text-sm font-medium text-center mb-1">Batalkan order ini?</p>
-                  <p className="text-white/40 text-xs text-center mb-4">Tindakan ini tidak bisa dibatalkan</p>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => setShowCancelConfirm(false)}
-                      className="flex-1 py-2.5 rounded-xl glass border border-white/10 text-white/60 text-sm hover:text-white transition-all"
-                    >
-                      Kembali
-                    </button>
-                    <button
-                      onClick={handleCancel}
-                      disabled={cancelling}
-                      className="flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-400/40 text-red-400 text-sm font-semibold hover:bg-red-500/30 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                    >
-                      {cancelling ? (
-                        <><div className="w-3.5 h-3.5 border border-red-400/40 border-t-red-400 rounded-full animate-spin" /> Membatalkan...</>
-                      ) : (
-                        <><Ban size={14} /> Ya, Batalkan</>
-                      )}
-                    </button>
-                  </div>
-                </motion.div>
-              )}
             </motion.div>
           )}
         </AnimatePresence>

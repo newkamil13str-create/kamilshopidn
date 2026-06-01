@@ -1,14 +1,21 @@
+/**
+ * app/api/check-payment/route.ts (UPDATED)
+ *
+ * Perubahan dari versi asli:
+ * - processDelivery() sekarang cek order.productType
+ * - Jika productType === 'topup-game', panggil /api/topup-game
+ * - Jika productType biasa (stock), lanjut alur lama
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { FieldValue } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
-
-// FIX: Use shared firebase-admin helper instead of re-initializing per file
 
 const adminDb = getAdminDb();
 
 export async function GET(req: NextRequest) {
   const orderId = req.nextUrl.searchParams.get('orderId');
-  const type    = req.nextUrl.searchParams.get('type'); // 'deposit' | null
+  const type    = req.nextUrl.searchParams.get('type');
   if (!orderId) {
     return NextResponse.json({ error: 'orderId diperlukan' }, { status: 400 });
   }
@@ -16,19 +23,15 @@ export async function GET(req: NextRequest) {
   try {
     const adminDb = getAdminDb();
 
-    // Jika ini deposit, cek collection deposits
     if (type === 'deposit' || orderId.startsWith('DEP-')) {
       const depositDoc = await adminDb.doc(`deposits/${orderId}`).get();
       if (!depositDoc.exists) {
         return NextResponse.json({ error: 'Deposit tidak ditemukan' }, { status: 404 });
       }
       const deposit = depositDoc.data()!;
-
       if (['paid', 'failed', 'cancelled'].includes(deposit.status)) {
         return NextResponse.json({ status: deposit.status, deposit });
       }
-
-      // Kalau masih pending, webhook sudah otomatis handle — return status saja
       return NextResponse.json({ status: deposit.status, deposit });
     }
 
@@ -39,16 +42,15 @@ export async function GET(req: NextRequest) {
 
     const order = orderDoc.data()!;
 
-    // If already delivered or failed, return immediately
-    if (['delivered', 'failed', 'cancelled'].includes(order.status)) {
+    if (['delivered', 'failed', 'cancelled', 'topup_failed'].includes(order.status)) {
       return NextResponse.json({ status: order.status, order });
     }
 
-    // If already paid but not delivered, process delivery
     if (order.status === 'paid') {
       await processDelivery(orderId, order);
       const updatedOrder = (await adminDb.doc(`orders/${orderId}`).get()).data();
-      return NextResponse.json({ status: 'delivered', order: updatedOrder });
+      // Untuk topup-game, status bisa masih 'paid' (menunggu callback)
+      return NextResponse.json({ status: updatedOrder?.status || 'processing', order: updatedOrder });
     }
 
     return NextResponse.json({ status: order.status, order });
@@ -58,7 +60,6 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// Webhook endpoint — called by Pakasir when payment status changes
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -92,13 +93,19 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// FIX: Use Firestore Transaction to prevent race condition on stock claim
 async function processDelivery(orderId: string, order: FirebaseFirestore.DocumentData) {
   if (order.status === 'delivered') return;
 
+  // ─── TOPUP GAME via Qiospay H2H ─────────────────────────────────────────────
+  if (order.productType === 'topup-game') {
+    await processTopupGame(orderId, order);
+    return;
+  }
+
+  // ─── STOCK-BASED DELIVERY (alur lama) ────────────────────────────────────────
   try {
     const productRef = adminDb.doc(`products/${order.productId}`);
-    const orderRef = adminDb.doc(`orders/${orderId}`);
+    const orderRef   = adminDb.doc(`orders/${orderId}`);
 
     await adminDb.runTransaction(async (transaction) => {
       const productDoc = await transaction.get(productRef);
@@ -108,7 +115,6 @@ async function processDelivery(orderId: string, order: FirebaseFirestore.Documen
       const stock: string[] = product.stock || [];
 
       if (stock.length === 0) {
-        // Out of stock — mark as needs manual handling
         transaction.update(orderRef, {
           status: 'paid',
           deliveryContent: 'STOK_HABIS — Hubungi admin untuk mendapatkan produk',
@@ -116,25 +122,26 @@ async function processDelivery(orderId: string, order: FirebaseFirestore.Documen
         return;
       }
 
-      // Atomically claim first stock item inside transaction
-      const claimedItem = stock[0];
+      const claimedItem    = stock[0];
       const remainingStock = stock.slice(1);
 
       transaction.update(productRef, {
-        stock: remainingStock,
+        stock:     remainingStock,
         totalSold: FieldValue.increment(1),
       });
 
       transaction.update(orderRef, {
-        status: 'delivered',
+        status:          'delivered',
         deliveryContent: claimedItem,
-        paidAt: order.paidAt || FieldValue.serverTimestamp(),
+        paidAt:          order.paidAt || FieldValue.serverTimestamp(),
       });
     });
 
-    // Re-fetch order to get delivery content for email (after transaction committed)
     const updatedOrder = (await adminDb.doc(`orders/${orderId}`).get()).data();
-    if (updatedOrder?.deliveryContent && updatedOrder.deliveryContent !== 'STOK_HABIS — Hubungi admin untuk mendapatkan produk') {
+    if (
+      updatedOrder?.deliveryContent &&
+      updatedOrder.deliveryContent !== 'STOK_HABIS — Hubungi admin untuk mendapatkan produk'
+    ) {
       sendDeliveryEmail(
         order.customerEmail,
         order.customerName,
@@ -144,6 +151,34 @@ async function processDelivery(orderId: string, order: FirebaseFirestore.Documen
     }
   } catch (err) {
     console.error('Delivery error:', err);
+  }
+}
+
+// ─── Kirim request ke /api/topup-game ─────────────────────────────────────────
+async function processTopupGame(orderId: string, order: FirebaseFirestore.DocumentData) {
+  try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const res = await fetch(`${siteUrl}/api/topup-game`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId }),
+      signal: AbortSignal.timeout(35_000),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.error(`[processTopupGame] Error ${res.status}:`, err);
+      await adminDb.doc(`orders/${orderId}`).update({
+        topupStatus: 'dispatch_error',
+        topupNote: err?.error || `HTTP ${res.status}`,
+      });
+    }
+  } catch (err) {
+    console.error('[processTopupGame] Fetch error:', err);
+    await adminDb.doc(`orders/${orderId}`).update({
+      topupStatus: 'dispatch_error',
+      topupNote: err instanceof Error ? err.message : String(err),
+    });
   }
 }
 
@@ -164,33 +199,32 @@ async function sendDeliveryEmail(
     },
   });
 
+  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'KAMIL-SHOP';
+
   await transporter.sendMail({
-    from: `"KAMIL-SHOP" <${process.env.SMTP_USER || 'admin@kamilshop.my.id'}>`,
+    from: `"${siteName}" <${process.env.SMTP_USER || 'admin@kamilshop.my.id'}>`,
     to: email,
     subject: `✅ Produk Anda Telah Dikirim — ${productName}`,
     html: `
       <div style="font-family: 'DM Sans', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0F1E; color: white; border-radius: 16px; overflow: hidden;">
         <div style="background: linear-gradient(135deg, #2563EB, #1D4ED8); padding: 32px; text-align: center;">
-          <h1 style="margin: 0; font-size: 28px; font-weight: 800;">KAMIL-SHOP</h1>
+          <h1 style="margin: 0; font-size: 28px; font-weight: 800;">${siteName}</h1>
           <p style="margin: 8px 0 0; opacity: 0.8; font-size: 14px;">Solusi Digital Terpercaya #1</p>
         </div>
         <div style="padding: 32px;">
           <h2 style="color: #F59E0B; margin-top: 0;">✅ Pembayaran Berhasil!</h2>
           <p>Halo <strong>${name}</strong>,</p>
-          <p>Terima kasih telah berbelanja di KAMIL-SHOP. Pesanan Anda sudah diproses dan produk siap digunakan.</p>
-
+          <p>Terima kasih telah berbelanja. Pesanan Anda sudah diproses.</p>
           <div style="background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.3); border-radius: 12px; padding: 20px; margin: 24px 0;">
             <h3 style="margin-top: 0; color: #60A5FA;">${productName}</h3>
             <pre style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; color: #F59E0B; overflow: auto; word-break: break-all; white-space: pre-wrap;">${deliveryContent}</pre>
           </div>
-
           <p style="color: rgba(255,255,255,0.6); font-size: 14px;">
-            Simpan informasi di atas dengan baik. Jika ada pertanyaan, hubungi kami di
-            <a href="mailto:admin@kamilshop.my.id" style="color: #60A5FA;">admin@kamilshop.my.id</a>
+            Jika ada pertanyaan, hubungi kami.
           </p>
         </div>
         <div style="padding: 20px 32px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: rgba(255,255,255,0.3); font-size: 12px;">
-          © ${new Date().getFullYear()} KAMIL-SHOP. Semua hak dilindungi.
+          © ${new Date().getFullYear()} ${siteName}. Semua hak dilindungi.
         </div>
       </div>
     `,

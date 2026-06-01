@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Package, Tag, ShoppingBag, Users,
-  BarChart2, Settings, LogOut, Menu, X, ChevronRight, Shield, Zap, Wallet,
+  BarChart2, Settings, LogOut, Menu, X, ChevronRight, Shield, Zap, Gamepad2,
 } from 'lucide-react';
 import { useAuthStore } from '@/store';
 import { logout } from '@/lib/auth';
@@ -17,9 +17,9 @@ const navItems = [
   { href: '/admin/products',   label: 'Produk',       icon: Package },
   { href: '/admin/categories', label: 'Kategori',     icon: Tag },
   { href: '/admin/orders',     label: 'Pesanan',      icon: ShoppingBag },
-  { href: '/admin/deposits',   label: 'Deposit',      icon: Wallet },
   { href: '/admin/customers',  label: 'Pelanggan',    icon: Users },
   { href: '/admin/analytics',  label: 'Analitik',     icon: BarChart2 },
+  { href: '/admin/topup',      label: 'Top Up Game',  icon: Gamepad2 },
   { href: '/admin/promo',      label: 'Promo',        icon: Tag },
   { href: '/admin/affiliate',  label: 'Affiliate',    icon: Users },
   { href: '/admin/flash-sale', label: 'Flash Sale',   icon: Zap },

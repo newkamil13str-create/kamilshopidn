@@ -1,3 +1,12 @@
+/**
+ * app/api/create-payment/route.ts (UPDATED)
+ *
+ * Perubahan dari versi asli:
+ * - Menerima field tambahan: productType, gameName, qiospayProduct,
+ *   gameDestination, gameZoneId
+ * - Menyimpan field-field tersebut ke Firestore orders
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { FieldValue } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
@@ -20,13 +29,31 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { method, amount, orderId, productId, customerData, productName, userId, promoCode, promoId, discount, referralCode } = body;
+    const {
+      method, amount, orderId, productId, customerData, productName,
+      userId, promoCode, promoId, discount, referralCode,
+      // ─── Field baru untuk topup-game ───
+      productType,
+      gameName,
+      qiospayProduct,
+      gameDestination,
+      gameZoneId,
+    } = body;
 
     if (!method || !amount || !orderId || !productId || !customerData) {
       return NextResponse.json({ error: 'Data tidak lengkap' }, { status: 400 });
     }
 
-    // Ambil Pakasir config
+    // Validasi tambahan untuk topup-game
+    if (productType === 'topup-game') {
+      if (!qiospayProduct) {
+        return NextResponse.json({ error: 'Kode produk Qiospay tidak ditemukan' }, { status: 400 });
+      }
+      if (!gameDestination) {
+        return NextResponse.json({ error: 'User ID game belum diisi' }, { status: 400 });
+      }
+    }
+
     const adminDb = getAdminDb();
     let pakasirSlug   = process.env.PAKASIR_SLUG   || '';
     let pakasirApiKey = process.env.PAKASIR_API_KEY || '';
@@ -44,7 +71,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Konfigurasi pembayaran belum diatur' }, { status: 500 });
     }
 
-    // Panggil Pakasir API dengan timeout 15 detik
     const controller = new AbortController();
     const timeout    = setTimeout(() => controller.abort(), 15000);
 
@@ -68,7 +94,6 @@ export async function POST(req: NextRequest) {
       pakasirData = await pakasirRes.json();
 
       if (!pakasirRes.ok || !pakasirData.payment) {
-        console.error('[Pakasir Error]', pakasirData);
         return NextResponse.json(
           { error: (pakasirData as Record<string, unknown>).message as string || 'Gagal menghubungi payment gateway' },
           { status: 502 }
@@ -77,7 +102,6 @@ export async function POST(req: NextRequest) {
     } catch (fetchErr: unknown) {
       clearTimeout(timeout);
       const msg = fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
-      console.error('[Pakasir Fetch Error]', msg);
       return NextResponse.json(
         { error: `Gagal menghubungi payment gateway: ${msg}` },
         { status: 502 }
@@ -86,50 +110,59 @@ export async function POST(req: NextRequest) {
 
     const payment = (pakasirData as Record<string, unknown>).payment as Record<string, unknown>;
 
-    // Simpan order ke Firestore
-    const webhookUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhook`;
-    await adminDb.doc(`orders/${orderId}`).set({
+    // ─── Simpan order ke Firestore ─────────────────────────────────────────────
+    const orderData: Record<string, unknown> = {
       orderId,
-      userId:          userId || null,
+      userId:           userId || null,
       productId,
-      productName:     productName || '',
-      customerName:    customerData.name,
-      customerEmail:   customerData.email,
+      productName:      productName || '',
+      customerName:     customerData.name,
+      customerEmail:    customerData.email,
       customerWhatsApp: customerData.whatsApp || '',
-      amount:          Number(amount),
-      fee:             payment.fee             || 0,
-      totalPayment:    payment.total_payment   || Number(amount),
-      paymentMethod:   method,
-      paymentNumber:   payment.payment_number  || '',
-      expiredAt:       payment.expired_at      || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      webhookUrl,
-      status:          'pending',
-      deliveryContent: null,
-      promoCode:       promoCode   || null,
-      promoId:         promoId     || null,
-      discount:        Number(discount) || 0,
-      affiliateCode:   referralCode || null,
-      createdAt:       FieldValue.serverTimestamp(),
-      paidAt:          null,
+      amount:           Number(amount),
+      fee:              payment.fee             || 0,
+      totalPayment:     payment.total_payment   || Number(amount),
+      paymentMethod:    method,
+      paymentNumber:    payment.payment_number  || '',
+      expiredAt:        payment.expired_at      || '',
+      status:           'pending',
+      promoCode:        promoCode || null,
+      promoId:          promoId   || null,
+      discount:         discount  || 0,
+      referralCode:     referralCode || null,
+      createdAt:        FieldValue.serverTimestamp(),
+    };
+
+    // Tambahkan field topup-game jika ada
+    if (productType === 'topup-game') {
+      orderData.productType      = 'topup-game';
+      orderData.gameName         = gameName         || productName;
+      orderData.qiospayProduct   = qiospayProduct;
+      orderData.gameDestination  = gameDestination;
+      orderData.gameZoneId       = gameZoneId       || null;
+      orderData.topupSent        = false;
+      orderData.topupStatus      = 'waiting_payment';
+    } else {
+      orderData.productType = 'stock';
+    }
+
+    await adminDb.doc(`orders/${orderId}`).set(orderData);
+
+    return NextResponse.json({
+      success: true,
+      payment: {
+        order_id:       orderId,
+        payment_number: payment.payment_number,
+        amount:         Number(amount),
+        fee:            payment.fee || 0,
+        total_payment:  payment.total_payment,
+        expired_at:     payment.expired_at,
+        method,
+        status:         'pending',
+      },
     });
-
-    // Increment totalOrders user
-    if (userId) {
-      try {
-        await adminDb.doc(`users/${userId}`).update({ totalOrders: FieldValue.increment(1) });
-      } catch {}
-    }
-
-    // Increment promo usedCount
-    if (promoId) {
-      try {
-        await adminDb.doc(`promo_codes/${promoId}`).update({ usedCount: FieldValue.increment(1) });
-      } catch {}
-    }
-
-    return NextResponse.json({ success: true, payment, orderId });
   } catch (error) {
-    console.error('[create-payment]', error);
+    console.error('Create payment error:', error);
     return NextResponse.json({ error: 'Terjadi kesalahan server' }, { status: 500 });
   }
 }
