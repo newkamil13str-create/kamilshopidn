@@ -67,6 +67,7 @@ export interface Order {
   affiliateCode?: string;
   createdAt?: Timestamp | Date;
   paidAt?: Timestamp | Date;
+  cancelledAt?: Timestamp | Date;
 }
 
 export interface PromoCode {

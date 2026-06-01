@@ -39,7 +39,8 @@ export async function POST(req: NextRequest) {
     }
 
     const isPaid = ['paid', 'success', 'settlement'].includes(String(status).toLowerCase());
-    const isFailed = ['failed', 'expired', 'cancel'].includes(String(status).toLowerCase());
+    const isCancelled = ['cancel', 'cancelled'].includes(String(status).toLowerCase());
+    const isFailed = ['failed', 'expired'].includes(String(status).toLowerCase());
 
     if (isPaid) {
       // Update status jadi paid dulu
@@ -72,6 +73,9 @@ export async function POST(req: NextRequest) {
         await processAffiliateCommission(orderId, order, adminDb);
       }
 
+    } else if (isCancelled) {
+      await orderRef.update({ status: 'cancelled', cancelledAt: FieldValue.serverTimestamp() });
+      console.log('[Webhook] Order cancelled:', orderId);
     } else if (isFailed) {
       await orderRef.update({ status: 'failed' });
       console.log('[Webhook] Order failed:', orderId);
