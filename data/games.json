@@ -612,7 +612,7 @@
     "name": "Free Fire",
     "slug": "free-fire",
     "icon": "🔥",
-    "needsZoneId": true,
+    "needsZoneId": false,
     "needsNick": false,
     "products": [
       {

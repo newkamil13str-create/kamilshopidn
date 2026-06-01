@@ -1,20 +1,13 @@
 'use client';
 
-/**
- * app/topup/[gameSlug]/page.tsx
- *
- * Halaman detail top up per game.
- * Fitur:
- * - Pilih nominal top up
- * - Input User ID / Zone ID sesuai game
- * - Validasi & redirect ke checkout
- */
-
 import { useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Zap, AlertCircle, ChevronRight, Gamepad2, User, Globe } from 'lucide-react';
+import {
+  ArrowLeft, Zap, AlertCircle, ChevronRight,
+  Gamepad2, User, Globe, Search, CheckCircle2, XCircle, Loader2,
+} from 'lucide-react';
 import { Navbar } from '@/components/shared/Navbar';
 import { Footer } from '@/components/shared/Footer';
 import { useCheckoutStore } from '@/store';
@@ -25,12 +18,15 @@ import toast from 'react-hot-toast';
 
 const games = gamesData as GameData[];
 
-// Markup harga jual (persentase profit di atas harga supplier Qiospay)
 const MARKUP_PERCENT = Number(process.env.NEXT_PUBLIC_TOPUP_MARKUP || '10');
-
 function applyMarkup(supplierPrice: number): number {
   return Math.ceil((supplierPrice * (1 + MARKUP_PERCENT / 100)) / 100) * 100;
 }
+
+// Game yang support cek nickname otomatis
+const SUPPORTED_CHECK_GAMES = ['free-fire', 'mobile-legends', 'mobile-legends-malaysia'];
+
+type CheckState = 'idle' | 'loading' | 'valid' | 'invalid' | 'not_supported';
 
 export default function GameTopupPage() {
   const { gameSlug } = useParams<{ gameSlug: string }>();
@@ -43,9 +39,12 @@ export default function GameTopupPage() {
   );
 
   const [selectedProduct, setSelectedGameProduct] = useState<GameProduct | null>(null);
-  const [userId, setUserId]   = useState('');
-  const [zoneId, setZoneId]   = useState('');
-  const [loading, setLoading] = useState(false);
+  const [userId, setUserId]     = useState('');
+  const [zoneId, setZoneId]     = useState('');
+  const [checkState, setCheckState] = useState<CheckState>('idle');
+  const [checkedUsername, setCheckedUsername] = useState('');
+  const [checkError, setCheckError] = useState('');
+  const [loading, setLoading]   = useState(false);
 
   if (!game) {
     return (
@@ -55,18 +54,72 @@ export default function GameTopupPage() {
           <div className="text-center">
             <div className="text-6xl mb-4">🎮</div>
             <h1 className="text-white text-2xl font-bold mb-2">Game Tidak Ditemukan</h1>
-            <Link href="/topup" className="text-purple-400 hover:underline">
-              ← Kembali ke daftar game
-            </Link>
+            <Link href="/topup" className="text-purple-400 hover:underline">← Kembali ke daftar game</Link>
           </div>
         </div>
       </main>
     );
   }
 
-  const idLabel   = game.needsZoneId ? 'User ID'      : 'User ID / Nomor';
+  const supportsCheck = SUPPORTED_CHECK_GAMES.includes(game.slug);
+  const idLabel   = 'User ID';
   const zoneLabel = 'Zone ID / Server';
 
+  // Reset check state kalau user ubah ID atau Zone ID
+  const handleUserIdChange = (val: string) => {
+    setUserId(val);
+    setCheckState('idle');
+    setCheckedUsername('');
+    setCheckError('');
+  };
+  const handleZoneIdChange = (val: string) => {
+    setZoneId(val);
+    setCheckState('idle');
+    setCheckedUsername('');
+    setCheckError('');
+  };
+
+  // ─── Cek Nickname ───────────────────────────────────────────────────────────
+  const handleCheckId = async () => {
+    if (!userId.trim()) {
+      toast.error(`Masukkan ${idLabel} terlebih dahulu`);
+      return;
+    }
+    if (game.needsZoneId && !zoneId.trim()) {
+      toast.error('Masukkan Zone ID terlebih dahulu');
+      return;
+    }
+
+    setCheckState('loading');
+    setCheckedUsername('');
+    setCheckError('');
+
+    try {
+      const params = new URLSearchParams({ game: game.slug, userId: userId.trim() });
+      if (game.needsZoneId && zoneId.trim()) params.append('zoneId', zoneId.trim());
+
+      const res  = await fetch(`/api/check-game-id?${params.toString()}`);
+      const data = await res.json();
+
+      if (!data.supported) {
+        setCheckState('not_supported');
+        return;
+      }
+
+      if (data.valid && data.username) {
+        setCheckState('valid');
+        setCheckedUsername(data.username);
+      } else {
+        setCheckState('invalid');
+        setCheckError(data.error || 'Akun tidak ditemukan. Periksa kembali ID kamu.');
+      }
+    } catch {
+      setCheckState('invalid');
+      setCheckError('Gagal menghubungi server. Coba lagi.');
+    }
+  };
+
+  // ─── Lanjut ke Checkout ─────────────────────────────────────────────────────
   const handleCheckout = () => {
     if (!selectedProduct) {
       toast.error('Pilih nominal top up terlebih dahulu');
@@ -80,17 +133,26 @@ export default function GameTopupPage() {
       toast.error('Masukkan Zone ID / Server game kamu');
       return;
     }
+    // Kalau game support cek tapi belum dicek atau invalid → blokir
+    if (supportsCheck && checkState !== 'valid' && checkState !== 'not_supported') {
+      toast.error('Cek akun terlebih dahulu sebelum melanjutkan');
+      return;
+    }
 
     setLoading(true);
 
-    // Buat object Product sementara yang kompatibel dengan checkout store
     const markedUpPrice = applyMarkup(selectedProduct.price);
     const checkoutProduct: Product = {
       id: `topup-${game.slug}-${selectedProduct.code}`,
       name: `${game.name} — ${selectedProduct.name}`,
       slug: `${game.slug}-${selectedProduct.code.toLowerCase()}`,
       description: `Top Up ${game.name} ${selectedProduct.name}`,
-      features: [`Nominal: ${selectedProduct.name}`, `Game: ${game.name}`, 'Proses otomatis', 'Instan & aman'],
+      features: [
+        `Nominal: ${selectedProduct.name}`,
+        `Game: ${game.name}`,
+        'Proses otomatis',
+        'Instan & aman',
+      ],
       price: markedUpPrice,
       originalPrice: markedUpPrice,
       category: 'top-up-game',
@@ -100,7 +162,6 @@ export default function GameTopupPage() {
       totalSold: 0,
       stock: [],
       isActive: true,
-      // Field khusus topup-game
       productType: 'topup-game',
       qiospayProduct: selectedProduct.code,
       gameName: game.name,
@@ -110,7 +171,6 @@ export default function GameTopupPage() {
       zoneLabel,
     };
 
-    // Simpan info game destination ke store untuk dikirim saat create-payment
     setSelectedProduct(checkoutProduct, 1, {
       gameDestination: userId.trim(),
       gameZoneId: game.needsZoneId ? zoneId.trim() : undefined,
@@ -118,6 +178,17 @@ export default function GameTopupPage() {
 
     router.push('/checkout');
   };
+
+  // Tombol checkout hanya aktif kalau:
+  // 1. Ada produk dipilih
+  // 2. Ada userId
+  // 3. Jika needsZoneId → ada zoneId
+  // 4. Jika supportsCheck → checkState === 'valid' atau 'not_supported'
+  const canCheckout =
+    !!selectedProduct &&
+    !!userId.trim() &&
+    (!game.needsZoneId || !!zoneId.trim()) &&
+    (!supportsCheck || checkState === 'valid' || checkState === 'not_supported');
 
   return (
     <main className="min-h-screen animated-gradient mobile-nav-safe">
@@ -153,12 +224,17 @@ export default function GameTopupPage() {
                 <span className="inline-flex items-center gap-1 bg-purple-500/15 text-purple-400 text-xs px-2.5 py-1 rounded-full border border-purple-500/20">
                   <Gamepad2 className="w-3 h-3" /> H2H
                 </span>
+                {supportsCheck && (
+                  <span className="inline-flex items-center gap-1 bg-blue-500/15 text-blue-400 text-xs px-2.5 py-1 rounded-full border border-blue-500/20">
+                    <CheckCircle2 className="w-3 h-3" /> Cek Akun
+                  </span>
+                )}
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Pilih Nominal */}
+        {/* Step 1 — Pilih Nominal */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -168,7 +244,7 @@ export default function GameTopupPage() {
           <h2 className="text-white font-bold text-lg mb-4">1. Pilih Nominal</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {game.products.map((prod) => {
-              const price = applyMarkup(prod.price);
+              const price      = applyMarkup(prod.price);
               const isSelected = selectedProduct?.code === prod.code;
               return (
                 <button
@@ -176,16 +252,12 @@ export default function GameTopupPage() {
                   onClick={() => setSelectedGameProduct(prod)}
                   className={`
                     relative text-left p-3.5 rounded-2xl border transition-all duration-200
-                    ${
-                      isSelected
-                        ? 'border-purple-500 bg-purple-500/15 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
-                        : 'border-white/10 bg-white/3 hover:border-purple-500/40 hover:bg-white/6'
-                    }
+                    ${isSelected
+                      ? 'border-purple-500 bg-purple-500/15 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
+                      : 'border-white/10 bg-white/3 hover:border-purple-500/40 hover:bg-white/6'}
                   `}
                 >
-                  <p className="text-white text-sm font-semibold leading-tight mb-1">
-                    {prod.name}
-                  </p>
+                  <p className="text-white text-sm font-semibold leading-tight mb-1">{prod.name}</p>
                   <p className={`text-xs font-bold ${isSelected ? 'text-purple-300' : 'text-white/60'}`}>
                     {formatCurrency(price)}
                   </p>
@@ -200,7 +272,7 @@ export default function GameTopupPage() {
           </div>
         </motion.div>
 
-        {/* Input User ID */}
+        {/* Step 2 — Input Data Akun */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -219,13 +291,13 @@ export default function GameTopupPage() {
               <input
                 type="text"
                 value={userId}
-                onChange={(e) => setUserId(e.target.value)}
+                onChange={(e) => handleUserIdChange(e.target.value)}
                 placeholder={`Masukkan ${idLabel} kamu`}
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/25 focus:outline-none focus:border-purple-500/50 transition-all"
               />
             </div>
 
-            {/* Zone ID (opsional tergantung game) */}
+            {/* Zone ID */}
             {game.needsZoneId && (
               <div>
                 <label className="flex items-center gap-2 text-white/70 text-sm font-medium mb-2">
@@ -235,28 +307,75 @@ export default function GameTopupPage() {
                 <input
                   type="text"
                   value={zoneId}
-                  onChange={(e) => setZoneId(e.target.value)}
+                  onChange={(e) => handleZoneIdChange(e.target.value)}
                   placeholder="Contoh: 1234"
                   className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/25 focus:outline-none focus:border-purple-500/50 transition-all"
                 />
               </div>
             )}
 
-            {/* Petunjuk */}
+            {/* Tombol Cek Akun — hanya muncul untuk game yang support */}
+            {supportsCheck && (
+              <button
+                onClick={handleCheckId}
+                disabled={checkState === 'loading' || !userId.trim() || (game.needsZoneId && !zoneId.trim())}
+                className="w-full flex items-center justify-center gap-2 bg-white/8 hover:bg-white/12 disabled:opacity-40 border border-white/15 hover:border-purple-500/40 text-white font-semibold py-3 rounded-xl transition-all duration-200"
+              >
+                {checkState === 'loading' ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Mengecek akun...</>
+                ) : (
+                  <><Search className="w-4 h-4" /> Cek Akun</>
+                )}
+              </button>
+            )}
+
+            {/* Hasil Cek */}
+            <AnimatePresence>
+              {checkState === 'valid' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-center gap-3 bg-green-500/10 border border-green-500/30 rounded-xl p-4"
+                >
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <div>
+                    <p className="text-green-300 font-semibold text-sm">Akun Ditemukan</p>
+                    <p className="text-white font-bold text-base mt-0.5">{checkedUsername}</p>
+                    <p className="text-white/40 text-xs mt-0.5">Pastikan ini akun yang benar sebelum melanjutkan</p>
+                  </div>
+                </motion.div>
+              )}
+
+              {checkState === 'invalid' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-xl p-4"
+                >
+                  <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                  <div>
+                    <p className="text-red-300 font-semibold text-sm">Akun Tidak Ditemukan</p>
+                    <p className="text-white/60 text-xs mt-0.5">{checkError}</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Info */}
             <div className="flex items-start gap-3 bg-blue-500/10 border border-blue-500/20 rounded-xl p-3.5">
               <AlertCircle className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
               <p className="text-blue-300/80 text-xs leading-relaxed">
-                Pastikan {idLabel} yang kamu masukkan sudah benar.
-                {game.needsZoneId
-                  ? ` Untuk ${game.name}, User ID dan Zone ID bisa dilihat di profil akun dalam game.`
-                  : ` Cek di profil akun dalam game kamu.`}
-                {' '}Top up yang salah tidak dapat direfund.
+                {supportsCheck
+                  ? `Klik "Cek Akun" untuk memastikan ${idLabel} kamu benar sebelum melanjutkan. Top up yang salah tidak dapat direfund.`
+                  : `Pastikan ${idLabel} yang kamu masukkan sudah benar. Top up yang salah tidak dapat direfund.`}
               </p>
             </div>
           </div>
         </motion.div>
 
-        {/* Summary & CTA */}
+        {/* Step 3 — Konfirmasi & Checkout */}
         <AnimatePresence>
           {selectedProduct && (
             <motion.div
@@ -288,6 +407,13 @@ export default function GameTopupPage() {
                     <span className="text-white font-medium">{zoneId}</span>
                   </div>
                 )}
+                {/* Tampilkan username kalau sudah dicek */}
+                {checkState === 'valid' && checkedUsername && (
+                  <div className="flex justify-between">
+                    <span className="text-white/50">Nickname</span>
+                    <span className="text-green-400 font-bold">{checkedUsername}</span>
+                  </div>
+                )}
                 <div className="border-t border-white/10 pt-2 mt-2 flex justify-between">
                   <span className="text-white/70 font-semibold">Total</span>
                   <span className="text-purple-300 font-extrabold text-lg">
@@ -298,19 +424,28 @@ export default function GameTopupPage() {
 
               <button
                 onClick={handleCheckout}
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-60 text-white font-bold py-4 rounded-2xl transition-all duration-200 shadow-[0_0_30px_rgba(168,85,247,0.3)]"
+                disabled={loading || !canCheckout}
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl transition-all duration-200 shadow-[0_0_30px_rgba(168,85,247,0.3)]"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
                     <Zap className="w-5 h-5" />
-                    Lanjut ke Pembayaran
+                    {supportsCheck && checkState !== 'valid' && checkState !== 'not_supported'
+                      ? 'Cek Akun Dulu'
+                      : 'Lanjut ke Pembayaran'}
                     <ChevronRight className="w-5 h-5" />
                   </>
                 )}
               </button>
+
+              {/* Warning kalau belum cek */}
+              {supportsCheck && checkState === 'idle' && userId.trim() && (
+                <p className="text-center text-yellow-400/70 text-xs mt-3">
+                  ⚠️ Klik &quot;Cek Akun&quot; terlebih dahulu untuk verifikasi
+                </p>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
