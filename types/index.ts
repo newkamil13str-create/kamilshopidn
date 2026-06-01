@@ -1,3 +1,15 @@
+/**
+ * types/index.ts (UPDATED)
+ *
+ * Penambahan field untuk mendukung produk Top Up Game:
+ * - Product.productType: 'stock' | 'topup-game'
+ * - Product.qiospayProduct: kode produk Qiospay
+ * - Product.gameName: nama game
+ * - Product.needsZoneId: apakah butuh Zone/Server ID
+ * - Product.needsNick: apakah butuh Nickname
+ * - Order.productType, gameDestination, gameZoneId, topupStatus, dll.
+ */
+
 import { Timestamp } from 'firebase/firestore';
 
 export interface User {
@@ -10,6 +22,7 @@ export interface User {
   referralCode?: string;
   referredBy?: string;
   affiliateBalance?: number;
+  balance?: number;
   createdAt?: Timestamp | Date;
 }
 
@@ -24,10 +37,6 @@ export interface Product {
   category: string;
   imageUrl: string;
   badge: 'bestseller' | 'new' | '' | 'flash-sale';
-  productType?: 'digital' | 'topup-game';
-  qiospayProduct?: string;
-  gameName?: string;
-  needsZoneId?: boolean;
   rating: number;
   ratingCount?: number;
   totalSold: number;
@@ -39,6 +48,22 @@ export interface Product {
   bundleIds?: string[];
   bundlePrice?: number;
   createdAt?: Timestamp | Date;
+
+  // ─── Tambahan untuk Top Up Game ────────────────────────────────
+  /** 'stock' = kirim dari stok, 'topup-game' = proses via Qiospay H2H */
+  productType?: 'stock' | 'topup-game';
+  /** Kode produk Qiospay (contoh: 'ML5', 'FFP5', 'CODM10') */
+  qiospayProduct?: string;
+  /** Nama game (contoh: 'Mobile Legends', 'Free Fire') */
+  gameName?: string;
+  /** Apakah transaksi membutuhkan Zone/Server ID */
+  needsZoneId?: boolean;
+  /** Apakah transaksi membutuhkan Nickname */
+  needsNick?: boolean;
+  /** Label field ID (default: 'User ID') */
+  idLabel?: string;
+  /** Label field Zone (default: 'Zone ID / Server') */
+  zoneLabel?: string;
 }
 
 export interface Category {
@@ -64,23 +89,38 @@ export interface Order {
   paymentMethod: string;
   paymentNumber: string;
   expiredAt: string;
-  status: 'pending' | 'paid' | 'delivered' | 'failed' | 'cancelled';
+  status: 'pending' | 'paid' | 'delivered' | 'failed' | 'cancelled' | 'topup_failed';
   deliveryContent?: string;
   promoCode?: string;
   discount?: number;
   affiliateCode?: string;
-  // Topup game fields
-  productType?: 'digital' | 'topup-game';
-  gameName?: string;
-  qiospayProduct?: string;
-  gameDestination?: string;
-  gameZoneId?: string;
-  topupSent?: boolean;
-  topupStatus?: string;
-  topupNote?: string;
-  topupRaw?: string;
   createdAt?: Timestamp | Date;
   paidAt?: Timestamp | Date;
+  cancelledAt?: Timestamp | Date;
+
+  // ─── Tambahan untuk Top Up Game ────────────────────────────────
+  /** Tipe produk — menentukan alur delivery */
+  productType?: 'stock' | 'topup-game';
+  /** Nama game */
+  gameName?: string;
+  /** Kode produk Qiospay */
+  qiospayProduct?: string;
+  /** User ID / Player ID game */
+  gameDestination?: string;
+  /** Zone ID / Server ID (opsional, tergantung game) */
+  gameZoneId?: string;
+  /** Status topup dari Qiospay: processing | success | failed | config_error */
+  topupStatus?: string;
+  /** Pesan/respons dari Qiospay */
+  topupNote?: string;
+  /** Respons mentah dari Qiospay */
+  topupRaw?: string;
+  /** Apakah topup sudah dikirim ke Qiospay (mencegah double-send) */
+  topupSent?: boolean;
+  topupSentAt?: Timestamp | Date;
+  topupUpdatedAt?: Timestamp | Date;
+  topupCallbackAt?: Timestamp | Date;
+  topupFailedAt?: Timestamp | Date;
 }
 
 export interface PromoCode {
@@ -94,6 +134,24 @@ export interface PromoCode {
   isActive: boolean;
   expiredAt?: string;
   createdAt?: Timestamp | Date;
+}
+
+export interface Deposit {
+  id?: string;
+  depositId: string;
+  userId: string;
+  customerName: string;
+  customerEmail: string;
+  amount: number;
+  fee: number;
+  totalPayment: number;
+  paymentMethod: string;
+  paymentNumber: string;
+  expiredAt: string;
+  status: 'pending' | 'paid' | 'failed' | 'cancelled';
+  createdAt?: Timestamp | Date;
+  paidAt?: Timestamp | Date;
+  cancelledAt?: Timestamp | Date;
 }
 
 export interface AffiliateTransaction {
@@ -125,6 +183,12 @@ export interface SiteSettings {
   tagline?: string;
   affiliateCommissionPercent?: number;
   affiliateMinWithdraw?: number;
+  depositMin?: number;
+  depositMax?: number;
+  // Qiospay settings (disimpan di Firestore settings/site)
+  qiospayMemberId?: string;
+  qiospayPin?: string;
+  qiospayPassword?: string;
 }
 
 export interface CartItem {
@@ -138,6 +202,9 @@ export interface CheckoutForm {
   customerWhatsApp: string;
   paymentMethod: string;
   promoCode?: string;
+  // Tambahan untuk topup-game
+  gameDestination?: string;
+  gameZoneId?: string;
 }
 
 export interface PaymentData {
@@ -159,6 +226,7 @@ export interface AdminStats {
   totalCustomers: number;
 }
 
+// ─── Data statis game dari Qiospay ────────────────────────────────────────────
 export interface GameProduct {
   code: string;
   name: string;

@@ -1190,7 +1190,7 @@ function msgIdFromResult(r: unknown): number | undefined {
 }
 
 // ─── Export: Notif admin Telegram saat order paid ────────────────────────────
-async function notifyAdminNewOrder(order: {
+export async function notifyAdminNewOrder(order: {
   orderId: string;
   productName: string;
   customerName: string;

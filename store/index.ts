@@ -70,10 +70,16 @@ export const useCartStore = create<CartState>()(
 );
 
 // ─── Checkout Store ───────────────────────────────────────────────────────────
+interface TopupGameData {
+  gameDestination?: string;
+  gameZoneId?: string;
+}
+
 interface CheckoutState {
   selectedProduct: Product | null;
   quantity: number;
-  setSelectedProduct: (product: Product | null, qty?: number) => void;
+  topupGameData: TopupGameData | null;
+  setSelectedProduct: (product: Product | null, qty?: number, topupData?: TopupGameData) => void;
   clearCheckout: () => void;
 }
 
@@ -82,9 +88,10 @@ export const useCheckoutStore = create<CheckoutState>()(
     (set) => ({
       selectedProduct: null,
       quantity: 1,
-      setSelectedProduct: (product, qty = 1) =>
-        set({ selectedProduct: product, quantity: qty }),
-      clearCheckout: () => set({ selectedProduct: null, quantity: 1 }),
+      topupGameData: null,
+      setSelectedProduct: (product, qty = 1, topupData) =>
+        set({ selectedProduct: product, quantity: qty, topupGameData: topupData || null }),
+      clearCheckout: () => set({ selectedProduct: null, quantity: 1, topupGameData: null }),
     }),
     { name: 'kamil-checkout' }
   )

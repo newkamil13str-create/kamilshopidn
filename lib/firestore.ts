@@ -19,7 +19,7 @@ import {
   increment,
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { Product, Order, User, Category, SiteSettings } from '@/types';
+import { Product, Order, User, Category, SiteSettings, Deposit } from '@/types';
 
 // ─── Users ───────────────────────────────────────────────────────────────────
 export async function createUser(uid: string, data: Partial<User>) {
@@ -160,6 +160,36 @@ export function subscribeToOrders(
   if (filters?.limitCount) constraints.push(limit(filters.limitCount));
   return onSnapshot(query(collection(db, 'orders'), ...constraints), (snap) => {
     callback(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Order)));
+  });
+}
+
+// ─── Deposits ─────────────────────────────────────────────────────────────────
+export async function getDeposit(depositId: string): Promise<Deposit | null> {
+  const snap = await getDoc(doc(db, 'deposits', depositId));
+  return snap.exists() ? ({ id: snap.id, ...snap.data() } as Deposit) : null;
+}
+
+export async function getDepositsByUser(userId: string): Promise<Deposit[]> {
+  const snap = await getDocs(
+    query(collection(db, 'deposits'), where('userId', '==', userId), orderBy('createdAt', 'desc'))
+  );
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Deposit));
+}
+
+export async function getAllDeposits(filters?: { status?: string; limitCount?: number }): Promise<Deposit[]> {
+  const constraints: QueryConstraint[] = [];
+  if (filters?.status && filters.status !== 'all') {
+    constraints.push(where('status', '==', filters.status));
+  }
+  constraints.push(orderBy('createdAt', 'desc'));
+  if (filters?.limitCount) constraints.push(limit(filters.limitCount));
+  const snap = await getDocs(query(collection(db, 'deposits'), ...constraints));
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Deposit));
+}
+
+export function subscribeToDeposit(depositId: string, callback: (deposit: Deposit | null) => void) {
+  return onSnapshot(doc(db, 'deposits', depositId), (snap) => {
+    callback(snap.exists() ? ({ id: snap.id, ...snap.data() } as Deposit) : null);
   });
 }
 
