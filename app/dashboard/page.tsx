@@ -11,7 +11,7 @@ import { Footer } from '@/components/shared/Footer';
 import ReferralCard from '@/components/public/ReferralCard';
 import { formatCurrency, formatDate, getStatusColor, getStatusLabel } from '@/lib/utils';
 import { Order } from '@/types';
-import { Package, ShoppingBag, Users, ArrowRight } from 'lucide-react';
+import { Package, ShoppingBag, Users, ArrowRight, Wallet, Plus } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardPage() {
@@ -88,6 +88,28 @@ export default function DashboardPage() {
             </p>
           </motion.div>
         </div>
+
+        {/* Saldo */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="mb-8">
+          <div className="glass rounded-2xl p-5 border border-gold-500/20 flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Wallet size={15} className="text-gold-400" />
+                <span className="text-white/40 text-sm">Saldo Anda</span>
+              </div>
+              <p className="text-gold-400 font-bold font-mono text-2xl">
+                {formatCurrency(user.balance || 0)}
+              </p>
+            </div>
+            <Link
+              href="/deposit"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gold-500/15 border border-gold-500/30 text-gold-400 text-sm font-semibold hover:bg-gold-500/25 transition-all"
+            >
+              <Plus size={14} />
+              Top Up
+            </Link>
+          </div>
+        </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8">
           <div className="flex items-center gap-2 mb-4">

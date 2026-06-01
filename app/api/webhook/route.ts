@@ -22,6 +22,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'order_id diperlukan' }, { status: 400 });
     }
 
+    // Deposit ID diawali "DEP-" → teruskan ke deposit webhook handler
+    if (String(orderId).startsWith('DEP-')) {
+      const depositRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SITE_URL}/api/deposit/webhook`,
+        {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(body),
+        }
+      );
+      const depositData = await depositRes.json();
+      return NextResponse.json(depositData, { status: depositRes.status });
+    }
+
     const adminDb  = getAdminDb();
     const orderRef = adminDb.doc(`orders/${orderId}`);
     const orderDoc = await orderRef.get();

@@ -10,6 +10,7 @@ export interface User {
   referralCode?: string;
   referredBy?: string;
   affiliateBalance?: number;
+  balance?: number;
   createdAt?: Timestamp | Date;
 }
 
@@ -83,6 +84,24 @@ export interface PromoCode {
   createdAt?: Timestamp | Date;
 }
 
+export interface Deposit {
+  id?: string;
+  depositId: string;
+  userId: string;
+  customerName: string;
+  customerEmail: string;
+  amount: number;
+  fee: number;
+  totalPayment: number;
+  paymentMethod: string;
+  paymentNumber: string;
+  expiredAt: string;
+  status: 'pending' | 'paid' | 'failed' | 'cancelled';
+  createdAt?: Timestamp | Date;
+  paidAt?: Timestamp | Date;
+  cancelledAt?: Timestamp | Date;
+}
+
 export interface AffiliateTransaction {
   id: string;
   affiliateUserId: string;
@@ -112,6 +131,8 @@ export interface SiteSettings {
   tagline?: string;
   affiliateCommissionPercent?: number;
   affiliateMinWithdraw?: number;
+  depositMin?: number;
+  depositMax?: number;
 }
 
 export interface CartItem {

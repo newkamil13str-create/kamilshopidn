@@ -8,12 +8,30 @@ const adminDb = getAdminDb();
 
 export async function GET(req: NextRequest) {
   const orderId = req.nextUrl.searchParams.get('orderId');
+  const type    = req.nextUrl.searchParams.get('type'); // 'deposit' | null
   if (!orderId) {
     return NextResponse.json({ error: 'orderId diperlukan' }, { status: 400 });
   }
 
   try {
-    const orderDoc = await adminDb.doc(`orders/${orderId}`).get();
+    const adminDb = getAdminDb();
+
+    // Jika ini deposit, cek collection deposits
+    if (type === 'deposit' || orderId.startsWith('DEP-')) {
+      const depositDoc = await adminDb.doc(`deposits/${orderId}`).get();
+      if (!depositDoc.exists) {
+        return NextResponse.json({ error: 'Deposit tidak ditemukan' }, { status: 404 });
+      }
+      const deposit = depositDoc.data()!;
+
+      if (['paid', 'failed', 'cancelled'].includes(deposit.status)) {
+        return NextResponse.json({ status: deposit.status, deposit });
+      }
+
+      // Kalau masih pending, panggil Pakasir untuk cek status terbaru
+      // (opsional — webhook sudah otomatis, tapi ini fallback manual)
+      return NextResponse.json({ status: deposit.status, deposit });
+    }
     if (!orderDoc.exists) {
       return NextResponse.json({ error: 'Order tidak ditemukan' }, { status: 404 });
     }

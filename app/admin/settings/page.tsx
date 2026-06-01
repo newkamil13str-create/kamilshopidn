@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Save, Eye, EyeOff, Settings, User, Globe, CreditCard } from 'lucide-react';
+import { Save, Eye, EyeOff, Settings, User, Globe, CreditCard, Wallet } from 'lucide-react';
 import { getSettings, updateSettings, updateUser } from '@/lib/firestore';
 import { useAuthStore } from '@/store';
 import { SiteSettings } from '@/types';
@@ -18,6 +18,8 @@ const siteSchema = z.object({
   pakasirApiKey: z.string().min(1, 'API key wajib diisi'),
   affiliateCommissionPercent: z.coerce.number().min(1).max(100).optional(),
   affiliateMinWithdraw: z.coerce.number().min(0).optional(),
+  depositMin: z.coerce.number().min(1000).optional(),
+  depositMax: z.coerce.number().min(1000).optional(),
   maintenanceMode: z.boolean(),
 });
 const profileSchema = z.object({
@@ -121,6 +123,29 @@ export default function AdminSettingsPage() {
           </div>
           <button type="submit" disabled={savingSite} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gold-gradient text-navy-300 text-sm font-bold disabled:opacity-50">
             {savingSite ? <span className="w-4 h-4 border-2 border-navy-300/30 border-t-navy-300 rounded-full animate-spin" /> : <><Save size={15} /> Simpan Konfigurasi</>}
+          </button>
+        </form>
+      </motion.div>
+
+      {/* Deposit */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass rounded-2xl border border-white/5 overflow-hidden">
+        <div className="flex items-center gap-3 p-5 border-b border-white/5"><Wallet size={17} className="text-gold-400" /><h2 className="text-white font-semibold">Pengaturan Deposit</h2></div>
+        <form onSubmit={siteForm.handleSubmit(onSaveSite)} className="p-5 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-white/60 text-xs mb-1 block">Minimal Deposit (Rp)</label>
+              <input {...siteForm.register('depositMin')} type="number" min="1000" className="input-dark w-full px-3 py-2.5 rounded-xl text-sm" placeholder="10000" />
+            </div>
+            <div>
+              <label className="text-white/60 text-xs mb-1 block">Maksimal Deposit (Rp)</label>
+              <input {...siteForm.register('depositMax')} type="number" min="1000" className="input-dark w-full px-3 py-2.5 rounded-xl text-sm" placeholder="10000000" />
+            </div>
+          </div>
+          <div className="glass-blue rounded-xl p-3 text-xs text-electric-300/70">
+            💡 Webhook deposit: <span className="font-mono text-electric-400">{process.env.NEXT_PUBLIC_SITE_URL || 'https://kamilshop.my.id'}/api/deposit/webhook</span> — atau gunakan webhook utama, deposit ID otomatis dikenali dari prefix <span className="font-mono">DEP-</span>
+          </div>
+          <button type="submit" disabled={savingSite} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gold-gradient text-navy-300 text-sm font-bold disabled:opacity-50">
+            {savingSite ? <span className="w-4 h-4 border-2 border-navy-300/30 border-t-navy-300 rounded-full animate-spin" /> : <><Save size={15} /> Simpan</>}
           </button>
         </form>
       </motion.div>
