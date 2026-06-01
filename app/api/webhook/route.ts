@@ -175,7 +175,7 @@ async function sendDeliveryEmail(
     const isLink = contentType === 'link' || deliveryContent.startsWith('http');
 
     // ── Parse akun: deteksi format KEY: VALUE per baris ──────────────────────
-    function parseAccountLines(raw: string): { key: string; value: string }[] {
+    const parseAccountLines = (raw: string): { key: string; value: string }[] => {
       return raw.split('\n')
         .map(line => line.trim())
         .filter(Boolean)
@@ -186,7 +186,7 @@ async function sendDeliveryEmail(
           }
           return { key: '', value: line };
         });
-    }
+    };
 
     const isAccount = !isLink && /LOGIN|EMAIL|PASS|USER|TOKEN|KEY|AKUN/i.test(deliveryContent);
     const parsedLines = isAccount ? parseAccountLines(deliveryContent) : [];
