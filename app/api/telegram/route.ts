@@ -18,10 +18,6 @@ async function tg(method: string, body: Record<string, unknown>) {
   return res.json();
 }
 
-async function deleteMsg(chatId: number, messageId: number) {
-  return tg('deleteMessage', { chat_id: chatId, message_id: messageId }).catch(() => {});
-}
-
 async function sendMessage(chatId: number, text: string, extra?: Record<string, unknown>) {
   return tg('sendMessage', { chat_id: chatId, text, parse_mode: 'HTML', disable_web_page_preview: true, ...extra });
 }
@@ -564,9 +560,6 @@ async function processPayment(chatId: number, userId: number, method: string, s:
       }),
     });
 
-    // delete loading msg
-    deleteMsg(chatId, msgIdFromResult(loading) || 0).catch(() => {});
-
     const data = await res.json();
     if (!res.ok || !data.payment) {
       return sendMessage(chatId, `❌ Gagal: ${data.error || 'Coba lagi'}\n\nKetik /menu`, {
@@ -622,7 +615,6 @@ async function processPayment(chatId: number, userId: number, method: string, s:
     }
   } catch (err) {
     console.error('[processPayment]', err);
-    deleteMsg(chatId, msgIdFromResult(loading) || 0).catch(() => {});
     await sendMessage(chatId, '❌ Terjadi kesalahan. Coba lagi.\n\nKetik /menu', {
       reply_markup: { inline_keyboard: [[{ text: '🏠 Menu', callback_data: 'menu' }]] },
     });
@@ -1189,12 +1181,6 @@ async function authLogout(chatId: number, userId: number, s: Session) {
   return sendMessage(chatId, '👋 Kamu sudah <b>logout</b>.', {
     reply_markup: { inline_keyboard: [[{ text: '🏠 Menu Utama', callback_data: 'menu' }]] },
   });
-}
-
-async function deleteOld(chatId: number, s: Session) {
-  if (s.lastMsgId) {
-    deleteMsg(chatId, s.lastMsgId).catch(() => {});
-  }
 }
 
 function msgIdFromResult(r: unknown): number | undefined {
