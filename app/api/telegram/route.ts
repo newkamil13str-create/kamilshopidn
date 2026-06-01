@@ -152,6 +152,8 @@ async function handleMessage(msg: Record<string, unknown>) {
     clear(userId);
     return sendMessage(chatId, '✅ Dibatalkan. Ketik /menu untuk kembali.');
   }
+  // Blokir command admin dari user biasa — diam aja jangan respon
+  if (['/admin', '/orders', '/products', '/stats', '/addstock'].includes(text)) return;
 
   // ── Checkout flow ───────────────────────────────────────────────────────────
   if (s.step === 'await_name') {
@@ -248,9 +250,10 @@ async function handleCallback(query: Record<string, unknown>) {
   }
 
   // ── Public ──
-  if (data === 'menu')       return mainMenu(chatId, name, s);
-  if (data === 'products')   return productList(chatId, s);
-  if (data === 'my_orders')  return userOrders(chatId, userId, s);
+  // Kalau admin, semua callback 'menu' balik ke adminMenu
+  if (data === 'menu')       return isAdmin(chatId) ? adminMenu(chatId, s) : mainMenu(chatId, name, s);
+  if (data === 'products')   return isAdmin(chatId) ? adminProducts(chatId, s) : productList(chatId, s);
+  if (data === 'my_orders')  { if (isAdmin(chatId)) return adminOrders(chatId, s); return userOrders(chatId, userId, s); }
   if (data === 'help')       return helpMenu(chatId, s);
 
   if (data.startsWith('cat_'))     return productListByCategory(chatId, data.replace('cat_', ''), s);
@@ -267,7 +270,8 @@ async function handleCallback(query: Record<string, unknown>) {
   if (data.startsWith('pay_'))     return processPayment(chatId, userId, data.replace('pay_', ''), s);
   if (data.startsWith('cek_'))     return orderStatus(chatId, data.replace('cek_', ''));
 
-  // ── Auth callbacks ──
+  // ── Auth callbacks — khusus user biasa ──
+  if (isAdmin(chatId)) return; // admin ga butuh auth flow
   if (data === 'auth_menu')        return authMenu(chatId, s);
   if (data === 'auth_email_pw') {
     set(userId, { ...s, step: 'auth_await_email_pw' });
@@ -295,10 +299,6 @@ async function mainMenu(chatId: number, name: string, s: Session) {
         [
           { text: '🛒 Produk', callback_data: 'products' },
           { text: '📦 Pesanan Saya', callback_data: 'my_orders' },
-        ],
-        [
-          { text: '🔐 Login', callback_data: 'auth_menu' },
-          { text: '📝 Daftar', callback_data: 'auth_register' },
         ],
         [{ text: '❓ Bantuan', callback_data: 'help' }],
         [{ text: '🌐 Buka Website', url: `https://${SITE_DOMAIN}` }],
